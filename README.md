@@ -53,7 +53,7 @@
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/wwm9213/app-store-price)
 
-1. 点击按钮并登录 Render，连接有权访问本仓库的 GitHub 账号。为自己的部署建议 Fork 后修改按钮中的仓库地址，以免跟随其他维护者的提交自动更新。
+1. 点击按钮并登录 Render，连接有权访问本仓库的 GitHub 账号。还需安装 [Render GitHub 应用](https://github.com/apps/render/installations/new)，选择 **Only select repositories** 并仅授权目标仓库；只完成 GitHub 登录不足以开启自动部署。GitHub 如要求二次身份验证，请在授权页完成。为自己的部署建议 Fork 后修改按钮中的仓库地址，以免跟随其他维护者的提交自动更新。
 2. 使用仓库中的 `render.yaml` 创建 Web Service，确认 **Free**、Docker、`main` 分支、新加坡地区；不需要数据库或磁盘。
 3. 首次构建成功后，使用 Render 实际分配的 `https://…onrender.com` 地址访问。健康检查路径为 `/api/v2/storefronts`。
 4. 后续推送到 `main`，GitHub CI 检查通过后，Render 才自动部署（`autoDeployTrigger: checksPass`）。通过“Git Provider”连接仓库才能自动更新；仅填写 Public Git Repository URL 的服务需要手动部署。
