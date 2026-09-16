@@ -1,6 +1,18 @@
-# 本地验收记录
+# 验收与部署记录
 
-本文保留发布前各轮本地验收的历史状态；文中的“未提交、推送或部署”指对应验收时点。最新远程构建和交付状态以 [GitHub Actions](https://github.com/wwm9213/app-store-price/actions) 为准。
+本文保留各轮验收的历史状态；文中的“未提交、推送或部署”指对应验收时点。远程构建以 [GitHub Actions](https://github.com/wwm9213/app-store-price/actions) 为准，站点部署和实际查询结果单独记录。
+
+## Render 首次上线（2026-09-16）
+
+- 站点：[app-store-price-lb2k.onrender.com](https://app-store-price-lb2k.onrender.com/)。新加坡 Free Docker 服务，通过 `render.yaml` 连接 `wwm9213/app-store-price` 的 `main`；自动部署配置为 GitHub 检查通过后触发。
+- 首次部署提交 `000827a472c6b9aeaa996f260ec56dea28179520`。GitHub [构建记录](https://github.com/wwm9213/app-store-price/actions/runs/35052363617)：53 项 Java、15 项前端测试通过，干净 Docker 构建、Compose 启动与 HTTP 回读通过，AMD64 / ARM64 镜像发布成功。
+- Render 于 12:01:59（Asia/Shanghai）显示服务 Live。启动日志确认 Java 21、非 root 用户、8080 端口；公网 HTTPS 首页和 `/api/v2/storefronts` 返回成功，配置为 175 区、默认 14 区。
+- 公网 SSE 查询 `1546947240`：收到初始快照、心跳、14 次地区更新及完成事件，最终 **14 成功、0 不可售、0 失败**。本体、永久会员、季度会员各覆盖 14 区；汇率日期为 `2026-09-15`。
+- 内置浏览器从空白首页搜索 X：Loading 正常显示，37 个候选等待手动选择；选择 `333903271` 后逐区返回，最终 **14 成功、0 不可售、0 失败**。购买项目展示 12 个应用与内购入口、22 个创作者订阅入口，`Promote Post` 只保留一个入口。
+- 实际切换 `X Premium (Annual)`，基准下拉输入 `hk` 后只显示香港，选择后更新比较结果；浏览器控制台无 error / warn。
+- 以上是首次部署时的实际观测。免费实例会休眠，冷启动明显慢于本机；首次请求在启动完成前曾超时，服务 Live 后查询正常。没有为规避休眠配置保活，也没有添加付费服务。
+
+## 发布前本地验收
 
 日期：2026-09-16（Asia/Shanghai）。基线 `87addff6788eba1a615ec1a92262a46a9715ddb6`，本地分支 `codex/global-storefront-comparison`。本次未提交、推送或部署。
 

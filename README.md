@@ -2,7 +2,7 @@
 
 [![check](https://github.com/wwm9213/app-store-price/actions/workflows/check.yml/badge.svg)](https://github.com/wwm9213/app-store-price/actions/workflows/check.yml)
 
-[源代码](https://github.com/wwm9213/app-store-price) · [构建记录与 JAR](https://github.com/wwm9213/app-store-price/actions/workflows/check.yml) · [问题反馈](https://github.com/wwm9213/app-store-price/issues)
+[在线访问](https://app-store-price-lb2k.onrender.com/) · [源代码](https://github.com/wwm9213/app-store-price) · [构建记录与 JAR](https://github.com/wwm9213/app-store-price/actions/workflows/check.yml) · [问题反馈](https://github.com/wwm9213/app-store-price/issues)
 
 比较 Apple App Store **175 个实际 storefront** 的应用本体和公开内购价格。输入应用名称、App ID 或 App Store 链接，结果通过 SSE 陆续展示。默认仅查询 **14 个主流地区**，可切换保存的地区或手动查询全部 175 区。Java 21 / Spring Boot 4.1 / Alpine.js，无数据库、Redis 或 Apple 开发者账号要求。
 
@@ -48,6 +48,8 @@
 ## 连接 GitHub 自动部署
 
 本仓库提供 Render 部署配置，保留名称搜索、任意 App ID 实时查询及 SSE 进度，无需自行维护服务器。
+
+当前站点：[app-store-price-lb2k.onrender.com](https://app-store-price-lb2k.onrender.com/)，使用新加坡 Free 实例。休眠后的首次打开需等待服务启动，请勿反复刷新。
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/wwm9213/app-store-price)
 
@@ -173,7 +175,7 @@ python3 scripts/update-storefronts.py --verify-currencies --only-missing
 
 解析、匹配、汇率和抓取在 `global/` 下分离；`AppService` 为旧接口适配层；`QueryService` 协调缓存和 SSE；页面逻辑和样式分别位于 `static/app.js` 与 `static/app.css`。前端库放在 `static/vendor/`，附来源及许可证，无需在用户浏览器访问 CDN。
 
-此前本地验收记录见 [docs/VERIFICATION.md](docs/VERIFICATION.md)。GitHub 上的实际构建结果以 Actions 对应提交记录为准。外部 Apple 页面随时可能变动或限流，测试通过不能保证每次全球抓取都全成功。
+本地验收和首次上线记录见 [docs/VERIFICATION.md](docs/VERIFICATION.md)。GitHub 上的实际构建结果以 Actions 对应提交记录为准。外部 Apple 页面随时可能变动或限流，测试通过不能保证每次全球抓取都全成功。
 
 ## 来源与许可证
 
