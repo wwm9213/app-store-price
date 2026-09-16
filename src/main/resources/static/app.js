@@ -242,7 +242,7 @@ function appStore() {
         },
         retained(area) { return (this.snapshot?.retainedRegions || []).some(r => r.area === area); },
         get queryStatus() {
-            if (this.loading) return this.snapshot?.products.length ? '正在更新 · 缓存价格仍可查看' : '正在获取所选地区价格';
+            if (this.loading) return this.snapshot?.retainedRegions?.length ? '正在更新 · 缓存价格仍可查看' : '正在获取所选地区价格';
             if (this.snapshot?.refreshError) return '更新失败 · 已保留上次数据';
             if (this.snapshot?.progress.complete) return this.snapshot.progress.failed ? '更新完成 · 部分地区失败' : this.fromCache ? '缓存数据（15 分钟内）' : '更新完成';
             return '等待连接';

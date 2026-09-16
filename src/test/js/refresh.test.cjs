@@ -37,9 +37,13 @@ test('stale cache remains visible while background query obtains a stable SSE qu
     const request=state.query('1');
     assert.equal(state.loading,true);assert.equal(state.pageLoading,false);assert.equal(state.rows[0].local.amount,4.99);
     assert.equal(state.retained('us'),true);assert.equal(state.lowest,null);
+    assert.match(state.queryStatus,/缓存价格仍可查看/);
     resolve({data:{code:0,data:pending()}});await request;
     const stream=EventSource.instances[0];assert.match(stream.url,/queryId=query-new/);assert.match(stream.url,/refresh=false/);
-    const result=snapshot(0,5.99);stream.emit('complete',result);
+    const result=snapshot(0,5.99);
+    stream.emit('region',{...result,progress:{...result.progress,complete:false}});
+    assert.equal(state.queryStatus,'正在获取所选地区价格','new observations must not be labelled cached');
+    stream.emit('complete',result);
     assert.equal(state.loading,false);assert.equal(state.rows[0].local.amount,5.99);assert.equal(state.retained('us'),false);
 });
 test('force refresh bypasses even fresh browser cache and only refreshes on initial HTTP request',async()=>{

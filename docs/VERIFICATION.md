@@ -12,6 +12,13 @@
 - 桌面 1280×720、手机 390×844 无横向溢出，抓取时间与手机价格卡片正常，控制台无 error / warn。本轮刷新失败通过受控自动化验证，真实 Apple 查询未遇到失败。
 - 以上为本轮本地验证。容器、远程 CI 及 Render 发布结果应以本提交的 Actions 和服务部署记录为准。
 
+### 本轮发布回读
+
+- 首次远程容器构建暴露“完成状态先于缓存登记”的并发时序问题，修复后提交 `a21a903` 的 [GitHub Actions](https://github.com/wwm9213/app-store-price/actions/runs/35057466277) 全部通过：Java / Node 测试、干净 Docker 构建、容器启动及 HTTP 回读、AMD64 / ARM64 镜像发布。本地也完成同一修复的干净镜像构建与 175 区 / 默认 14 区接口检查。
+- Render 自动部署 `a21a903` 成功，记录为 `dep-dal23j7qj5pc73dqeud0`，显示 Live。
+- 公网 App `1546947240` 主流查询最终 **14 成功、0 不可售、0 失败**。US / CN 普通请求复用相同快照；强制刷新将抓取时间从 13:00:54 更新为 13:01:09 / 13:01:10（Asia/Shanghai），两区均成功；SSE 按 `queryId` 重连保持同一快照。
+- 线上观察后另修正首次查询的进度提示：仅在确实保留旧价时显示“缓存价格仍可查看”，实时返回的新价格不再误标为缓存；对应状态回归已纳入前端测试。此文记录已发生的部署，新提交的上线状态以对应部署记录为准。
+
 ## Render 首次上线（2026-09-16）
 
 - 站点：[app-store-price-lb2k.onrender.com](https://app-store-price-lb2k.onrender.com/)。新加坡 Free Docker 服务，通过 `render.yaml` 连接 `wwm9213/app-store-price` 的 `main`；自动部署配置为 GitHub 检查通过后触发。
