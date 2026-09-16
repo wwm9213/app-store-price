@@ -29,6 +29,7 @@ public class CommonResultHandler implements ResponseBodyAdvice<Object> {
     @SuppressWarnings("NullableProblems")
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        if (MediaType.TEXT_EVENT_STREAM.isCompatibleWith(selectedContentType)) return body;
         if (body instanceof R) {
             return body;
         } else {

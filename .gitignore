@@ -4,3 +4,6 @@
 # Editor directories and files
 .idea
 .vscode
+
+/data/
+.env

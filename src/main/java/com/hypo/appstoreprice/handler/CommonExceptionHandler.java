@@ -56,7 +56,10 @@ public class CommonExceptionHandler {
      * 404：页面请求重定向首页
      */
     @ExceptionHandler(NoResourceFoundException.class)
-    public ModelAndView noResourceFoundHandler(NoResourceFoundException ex, HttpServletRequest request) {
+    public Object noResourceFoundHandler(NoResourceFoundException ex, HttpServletRequest request) {
+        if (request.getRequestURI().startsWith("/api/")) {
+            return org.springframework.http.ResponseEntity.status(404).body(R.failed("接口不存在"));
+        }
         return new ModelAndView("redirect:/");
     }
 
@@ -72,6 +75,14 @@ public class CommonExceptionHandler {
         return R.failed("系统异常");
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @org.springframework.web.bind.annotation.ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public R invalidArgument(IllegalArgumentException e) { return R.failed(e.getMessage()); }
+
+    @ExceptionHandler(IllegalStateException.class)
+    @org.springframework.web.bind.annotation.ResponseStatus(org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE)
+    public R busy(IllegalStateException e) { return R.failed(e.getMessage()); }
+
     /**
      * 客户端终止异常
      *
@@ -80,7 +91,7 @@ public class CommonExceptionHandler {
     @SuppressWarnings("all")
     @ExceptionHandler(value = ClientAbortException.class)
     public void clientAbortExceptionHandler(ClientAbortException e) {
-        if (e.getCause().getClass().equals(IOException.class)) {
+        if (e.getCause() instanceof IOException) {
             // 写操作IO异常几乎总是由于客户端主动关闭连接导致，忽略
         } else {
             LogUtil.error(log, "ClientAbortException", e);

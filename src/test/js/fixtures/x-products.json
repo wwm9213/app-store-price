@@ -1,0 +1,877 @@
+[
+  {
+    "productKey": "iap-c26208d43a69d1ab30f2b80d",
+    "name": "Promote Post",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "MATCH_UNCERTAIN",
+    "names": {
+      "gb": "Promote Post"
+    },
+    "prices": [
+      {
+        "area": "gb",
+        "areaName": "英国",
+        "region": "欧洲",
+        "name": "Promote Post",
+        "local": {
+          "amount": 10.0,
+          "currency": "GBP",
+          "formatted": "£10.00"
+        },
+        "cny": 90.4886433297209,
+        "usd": 13.484424875727203,
+        "exchangeRate": 9.04886433297209,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/gb/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:32:56.580796Z",
+        "matchStatus": "MATCH_UNCERTAIN",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      }
+    ]
+  },
+  {
+    "productKey": "iap-427f56a5bfcc04c560395ea7",
+    "name": "Promote Post",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "MATCH_UNCERTAIN",
+    "names": {
+      "au": "Promote Post"
+    },
+    "prices": [
+      {
+        "area": "au",
+        "areaName": "澳大利亚",
+        "region": "大洋洲",
+        "name": "Promote Post",
+        "local": {
+          "amount": 15.0,
+          "currency": "AUD",
+          "formatted": "$15.00"
+        },
+        "cny": 71.66659751029958,
+        "usd": 10.679603701265853,
+        "exchangeRate": 4.777773167353306,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/au/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:33:02.249972Z",
+        "matchStatus": "MATCH_UNCERTAIN",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      }
+    ]
+  },
+  {
+    "productKey": "iap-94ff2f7d1583215c96124dcc",
+    "name": "Promote Post",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "MATCH_UNCERTAIN",
+    "names": {
+      "at": "Promote Post"
+    },
+    "prices": [
+      {
+        "area": "at",
+        "areaName": "奥地利",
+        "region": "欧洲",
+        "name": "Promote Post",
+        "local": {
+          "amount": 10999.99,
+          "currency": "EUR",
+          "formatted": "10.999,99 €"
+        },
+        "cny": 85152.44062200081,
+        "usd": 12689.235315069154,
+        "exchangeRate": 7.741138003034622,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/at/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:33:33.882246Z",
+        "matchStatus": "MATCH_UNCERTAIN",
+        "matchEvidence": "唯一显示名称，商品身份未经 ID 确认",
+        "anomalousLow": false
+      }
+    ]
+  },
+  {
+    "productKey": "iap-5145740ca8a721a5d2e98cc9",
+    "name": "Promote Post",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "MATCH_UNCERTAIN",
+    "names": {
+      "at": "Promote Post"
+    },
+    "prices": [
+      {
+        "area": "at",
+        "areaName": "奥地利",
+        "region": "欧洲",
+        "name": "Promote Post",
+        "local": {
+          "amount": 5499.99,
+          "currency": "EUR",
+          "formatted": "5.499,99 €"
+        },
+        "cny": 42576.18160531039,
+        "usd": 6344.611889695099,
+        "exchangeRate": 7.741138003034622,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/at/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:33:33.882246Z",
+        "matchStatus": "MATCH_UNCERTAIN",
+        "matchEvidence": "唯一显示名称，商品身份未经 ID 确认",
+        "anomalousLow": false
+      }
+    ]
+  },
+  {
+    "productKey": "iap-a8819d7bc418513a3b40650e",
+    "name": "X Premium (Monthly)",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "INFERRED",
+    "names": {
+      "us": "X Premium (Monthly)",
+      "au": "X Premium (Monthly)",
+      "gb": "X Premium (Monthly)"
+    },
+    "prices": [
+      {
+        "area": "us",
+        "areaName": "美国",
+        "region": "北美",
+        "name": "X Premium (Monthly)",
+        "local": {
+          "amount": 11.0,
+          "currency": "USD",
+          "formatted": "$11.00"
+        },
+        "cny": 73.81665038,
+        "usd": 11.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/us/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:32:43.657974Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "au",
+        "areaName": "澳大利亚",
+        "region": "大洋洲",
+        "name": "X Premium (Monthly)",
+        "local": {
+          "amount": 16.0,
+          "currency": "AUD",
+          "formatted": "$16.00"
+        },
+        "cny": 76.4443706776529,
+        "usd": 11.391577281350244,
+        "exchangeRate": 4.777773167353306,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/au/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:33:02.249972Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "gb",
+        "areaName": "英国",
+        "region": "欧洲",
+        "name": "X Premium (Monthly)",
+        "local": {
+          "amount": 11.0,
+          "currency": "GBP",
+          "formatted": "£11.00"
+        },
+        "cny": 99.53750766269299,
+        "usd": 14.832867363299924,
+        "exchangeRate": 9.04886433297209,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/gb/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:32:56.580796Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      }
+    ]
+  },
+  {
+    "productKey": "iap-abadfd8bce5a96b07d5d5316",
+    "name": "@@itsJohnRocker Subscription",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "INFERRED",
+    "names": {
+      "ai": "@@itsJohnRocker Subscription",
+      "bt": "@@itsJohnRocker Subscription",
+      "cv": "@@itsJohnRocker Subscription",
+      "dm": "@@itsJohnRocker Subscription",
+      "fj": "@@itsJohnRocker Subscription",
+      "fm": "@@itsJohnRocker Subscription",
+      "ga": "@@itsJohnRocker Subscription",
+      "gd": "@@itsJohnRocker Subscription",
+      "gw": "@@itsJohnRocker Subscription",
+      "lr": "@@itsJohnRocker Subscription",
+      "mg": "@@itsJohnRocker Subscription",
+      "ms": "@@itsJohnRocker Subscription",
+      "mv": "@@itsJohnRocker Subscription",
+      "nr": "@@itsJohnRocker Subscription",
+      "sb": "@@itsJohnRocker Subscription",
+      "sc": "@@itsJohnRocker Subscription",
+      "sr": "@@itsJohnRocker Subscription",
+      "st": "@@itsJohnRocker Subscription",
+      "sz": "@@itsJohnRocker Subscription",
+      "tm": "@@itsJohnRocker Subscription",
+      "to": "@@itsJohnRocker Subscription",
+      "vc": "@@itsJohnRocker Subscription",
+      "vg": "@@itsJohnRocker Subscription",
+      "vu": "@@itsJohnRocker Subscription",
+      "at": "@@itsJohnRocker Subscription",
+      "cy": "@@itsJohnRocker Subscription",
+      "lu": "@@itsJohnRocker Subscription"
+    },
+    "prices": [
+      {
+        "area": "ai",
+        "areaName": "安圭拉",
+        "region": "北美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/ai/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:33:16.923676Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "bt",
+        "areaName": "不丹",
+        "region": "亚洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/bt/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:13.474567Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "cv",
+        "areaName": "佛得角",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/cv/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:22.578834Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "dm",
+        "areaName": "多米尼克",
+        "region": "北美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/dm/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:22.080187Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "fj",
+        "areaName": "斐济",
+        "region": "大洋洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/fj/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:24.965734Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "fm",
+        "areaName": "密克罗尼西亚",
+        "region": "大洋洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/fm/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:33.337827Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "ga",
+        "areaName": "加蓬",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/ga/app/x-anciennement-twitter/id333903271",
+        "fetchedAt": "2026-09-16T02:34:30.103298Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "唯一显示名称，商品身份未经 ID 确认",
+        "anomalousLow": false
+      },
+      {
+        "area": "gd",
+        "areaName": "格林纳达",
+        "region": "北美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/gd/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:28.338001Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "gw",
+        "areaName": "几内亚比绍",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/gw/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:42.501544Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "lr",
+        "areaName": "利比里亚",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/lr/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:55.259967Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "mg",
+        "areaName": "马达加斯加",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/mg/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:03.624380Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "ms",
+        "areaName": "蒙特塞拉特",
+        "region": "北美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/ms/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:05.953069Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "mv",
+        "areaName": "马尔代夫",
+        "region": "亚洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/mv/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:08.874766Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "nr",
+        "areaName": "瑙鲁",
+        "region": "大洋洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/nr/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:19.569648Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "sb",
+        "areaName": "所罗门群岛",
+        "region": "大洋洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/sb/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:36.156045Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "sc",
+        "areaName": "塞舌尔",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/sc/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:35.537592Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "sr",
+        "areaName": "苏里南",
+        "region": "南美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/sr/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:39.016145Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "st",
+        "areaName": "圣多美和普林西比",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/st/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:42.087859Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "sz",
+        "areaName": "斯威士兰",
+        "region": "非洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/sz/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:42.049379Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "tm",
+        "areaName": "土库曼斯坦",
+        "region": "亚洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/tm/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:53.814297Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "to",
+        "areaName": "汤加",
+        "region": "大洋洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/to/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:51.552196Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "vc",
+        "areaName": "圣文森特和格林纳丁斯",
+        "region": "北美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/vc/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:55.633173Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "vg",
+        "areaName": "英属维尔京群岛",
+        "region": "北美",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/vg/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:56.605861Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "vu",
+        "areaName": "瓦努阿图",
+        "region": "大洋洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/vu/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:56.940891Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "at",
+        "areaName": "奥地利",
+        "region": "欧洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 6.0,
+          "currency": "EUR",
+          "formatted": "6,00 €"
+        },
+        "cny": 46.44682801820773,
+        "usd": 6.921407373135333,
+        "exchangeRate": 7.741138003034622,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/at/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:33:33.882246Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "唯一显示名称，商品身份未经 ID 确认",
+        "anomalousLow": false
+      },
+      {
+        "area": "cy",
+        "areaName": "塞浦路斯",
+        "region": "欧洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 6.0,
+          "currency": "EUR",
+          "formatted": "6,00 €"
+        },
+        "cny": 46.44682801820773,
+        "usd": 6.921407373135333,
+        "exchangeRate": 7.741138003034622,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/cy/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:21.266914Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "lu",
+        "areaName": "卢森堡",
+        "region": "欧洲",
+        "name": "@@itsJohnRocker Subscription",
+        "local": {
+          "amount": 6.0,
+          "currency": "EUR",
+          "formatted": "6,00 €"
+        },
+        "cny": 46.44682801820773,
+        "usd": 6.921407373135333,
+        "exchangeRate": 7.741138003034622,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/lu/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:00.306077Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      }
+    ]
+  },
+  {
+    "productKey": "iap-ca67164152838ef0247f5950",
+    "name": "@ActualiteBarca Subscription",
+    "type": "UNKNOWN",
+    "period": null,
+    "matchStatus": "INFERRED",
+    "names": {
+      "cg": "@ActualiteBarca Subscription",
+      "ma": "@ActualiteBarca Subscription",
+      "td": "@ActualiteBarca Subscription",
+      "fr": "@ActualiteBarca Subscription"
+    },
+    "prices": [
+      {
+        "area": "cg",
+        "areaName": "刚果（布）",
+        "region": "非洲",
+        "name": "@ActualiteBarca Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/cg/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:13.515537Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "ma",
+        "areaName": "摩洛哥",
+        "region": "非洲",
+        "name": "@ActualiteBarca Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "$5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/ma/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:34:59.835210Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "td",
+        "areaName": "乍得",
+        "region": "非洲",
+        "name": "@ActualiteBarca Subscription",
+        "local": {
+          "amount": 5.0,
+          "currency": "USD",
+          "formatted": "USD 5.00"
+        },
+        "cny": 33.5530229,
+        "usd": 5.0,
+        "exchangeRate": 6.71060458,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/td/app/x/id333903271",
+        "fetchedAt": "2026-09-16T02:35:45.979919Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "页面英文名称",
+        "anomalousLow": false
+      },
+      {
+        "area": "fr",
+        "areaName": "法国",
+        "region": "欧洲",
+        "name": "@ActualiteBarca Subscription",
+        "local": {
+          "amount": 6.0,
+          "currency": "EUR",
+          "formatted": "6,00 €"
+        },
+        "cny": 46.44682801820773,
+        "usd": 6.921407373135333,
+        "exchangeRate": 7.741138003034622,
+        "rateAsOf": "2026-09-15",
+        "sourceUrl": "https://apps.apple.com/fr/app/x-anciennement-twitter/id333903271",
+        "fetchedAt": "2026-09-16T02:33:06.722409Z",
+        "matchStatus": "INFERRED",
+        "matchEvidence": "同区英文页唯一金额对应: https://apps.apple.com/fr/app/x/id333903271?l=en-GB",
+        "anomalousLow": false
+      }
+    ]
+  }
+]

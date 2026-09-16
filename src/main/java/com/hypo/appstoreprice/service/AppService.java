@@ -1,353 +1,116 @@
 package com.hypo.appstoreprice.service;
 
-import cn.hutool.cache.Cache;
-import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.mutable.Mutable;
-import cn.hutool.core.lang.mutable.MutableObj;
-import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
-import com.hypo.appstoreprice.common.BizException;
+import com.alibaba.fastjson2.*;
+import com.google.common.cache.*;
+import com.hypo.appstoreprice.global.*;
+import com.hypo.appstoreprice.global.Models.*;
 import com.hypo.appstoreprice.pojo.bean.Money;
-import com.hypo.appstoreprice.pojo.enums.AreaEnum;
 import com.hypo.appstoreprice.pojo.request.GetAppListReqDTO;
 import com.hypo.appstoreprice.pojo.response.*;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.LongAdder;
 
-/**
- * app service
- *
- * @author hypo
- * @date 2025-09-16
- */
-@Slf4j
+/** Legacy API adapter: preserve wire fields and its original thirteen storefronts. */
 @Service
 public class AppService {
-
-    /**
-     * app 搜索列表缓存
-     */
-    private static final Cache<String, List<GetAppListResDTO>> APP_LIST_CACHE = new TimedCache<>(Duration.ofDays(1L).toMillis(), new ConcurrentHashMap<>());
-
-    /**
-     * app 信息缓存
-     */
-    private static final Cache<String, List<GetAppInfoResDTO>> APP_INFO_CACHE = new TimedCache<>(Duration.ofDays(1L).toMillis(), new ConcurrentHashMap<>());
-
-    /**
-     * lock pool
-     */
-    private static final ConcurrentHashMap<String, Object> LOCK_POOL = new ConcurrentHashMap<>();
-
-    /**
-     * 热门搜索词排行
-     */
-    private static final Multiset<String> POPULAR_SEARCH_WORD = HashMultiset.create();
-
-    /**
-     * get popular search word list
-     *
-     * @return {@link List }<{@link String }>
-     */
-    public List<String> getPopularSearchWordList() {
-        return POPULAR_SEARCH_WORD.entrySet()
-            .stream()
-            .sorted(Comparator.comparingInt(Multiset.Entry<String>::getCount).reversed())
-            .limit(10)
-            .map(Multiset.Entry::getElement)
-            .collect(Collectors.toList());
+    private final StorefrontRegistry registry;
+    private final AppFetcher fetcher;
+    private final AppleClient client;
+    private final ExchangeRateService exchange;
+    private final ProductMatcher matcher;
+    private final Cache<String, List<GetAppListResDTO>> searchCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(Duration.ofDays(1)).build();
+    private final ConcurrentHashMap<String, CompletableFuture<List<GetAppListResDTO>>> searches = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, LongAdder> popular = new ConcurrentHashMap<>();
+    public AppService(StorefrontRegistry registry, AppFetcher fetcher, AppleClient client, ExchangeRateService exchange, ProductMatcher matcher) {
+        this.registry = registry; this.fetcher = fetcher; this.client = client; this.exchange = exchange; this.matcher = matcher;
     }
-
-    /**
-     * get area list
-     *
-     * @return {@link List }<{@link AreaResDTO }>
-     */
     public List<AreaResDTO> getAreaList() {
-        return Arrays.stream(AreaEnum.values()).map(item -> {
-            AreaResDTO resDTO = new AreaResDTO();
-            resDTO.setCode(item.getCode());
-            resDTO.setName(item.getName());
-            return resDTO;
-        }).collect(Collectors.toList());
+        return StorefrontRegistry.LEGACY.stream().map(registry::get).map(s -> { AreaResDTO dto = new AreaResDTO(); dto.setCode(s.code()); dto.setName(s.nameZh()); return dto; }).toList();
     }
-
-    /**
-     * get app list
-     *
-     * @param reqDTO req dto
-     * @return {@link List }<{@link GetAppListResDTO }>
-     */
-    public List<GetAppListResDTO> getAppList(GetAppListReqDTO reqDTO) {
-        // 记录搜索次数
-        POPULAR_SEARCH_WORD.add(reqDTO.getAppName());
-
-        // 无锁检查缓存
-        String cacheKey = StrUtil.format("{}-{}", reqDTO.getAreaCode(), reqDTO.getAppName());
-        List<GetAppListResDTO> appListCache = APP_LIST_CACHE.get(cacheKey);
-        if (CollUtil.isNotEmpty(appListCache)) {
-            return appListCache;
-        }
-
-        // 获取锁对象（细粒度锁，按 appId 分段）
-        Object lock = LOCK_POOL.computeIfAbsent(StrUtil.format("getAppList-{}-{}", reqDTO.getAreaCode(), reqDTO.getAppName()), k -> new Object());
-
-        synchronized (lock) {
-            // 锁内再次检查缓存（双重检查）
-            appListCache = APP_LIST_CACHE.get(cacheKey);
-            if (CollUtil.isNotEmpty(appListCache)) {
-                return appListCache;
+    public List<String> getPopularSearchWordList() {
+        return popular.entrySet().stream().sorted(Comparator.<Map.Entry<String, LongAdder>>comparingLong(e -> e.getValue().sum()).reversed()).limit(10).map(Map.Entry::getKey).toList();
+    }
+    public List<GetAppListResDTO> getAppList(GetAppListReqDTO request) {
+        Storefront area = registry.get(request.getAreaCode());
+        String term = request.getAppName().trim(), key = area.code() + ":" + term;
+        if (popular.size() < 1000 || popular.containsKey(term)) popular.computeIfAbsent(term, k -> new LongAdder()).increment();
+        List<GetAppListResDTO> cached = searchCache.getIfPresent(key);
+        if (cached != null) return cached;
+        CompletableFuture<List<GetAppListResDTO>> pending = new CompletableFuture<>();
+        var existing = searches.putIfAbsent(key, pending);
+        if (existing != null) return existing.join();
+        try {
+            List<CompletableFuture<List<GetAppListResDTO>>> tasks = List.of("iphone", "ipad", "mac", "tv").stream().map(platform -> client.submit(() -> search(area.code(), term, platform))).toList();
+            LinkedHashMap<String, GetAppListResDTO> found = new LinkedHashMap<>();
+            int successful = 0;
+            for (var task : tasks) {
+                try { for (var app : task.join()) found.putIfAbsent(app.getAppId(), app); successful++; }
+                catch (CompletionException ignored) { }
             }
-            List<GetAppListResDTO> resultList = new CopyOnWriteArrayList<>();
-            CollUtil.newArrayList("iphone", "ipad", "mac", "tv").parallelStream().forEach(entity -> {
-                String searchUrl = StrUtil.format("https://apps.apple.com/{}/{}/search?term={}", reqDTO.getAreaCode(), entity, StrUtil.trim(reqDTO.getAppName()));
-                HttpResponse response = HttpUtil.createGet(searchUrl).execute();
-                if (!response.isOk()) {
-                    String errorMessage = StrUtil.format("search failed, areaCode: {}, appName: {}", reqDTO.getAreaCode(), reqDTO.getAppName());
-                    log.error(errorMessage);
-                    throw new BizException(errorMessage);
-                }
-                // 解析 HTML
-                Document doc = Jsoup.parse(response.body());
-                // 构造出参
-                Element scriptElement = doc.selectFirst("#serialized-server-data");
-                if (Objects.isNull(scriptElement)) {
-                    log.error("scriptElement is null, areaCode: {}, appName: {}", reqDTO.getAreaCode(), reqDTO.getAppName());
-                    return;
-                }
-                JSONArray items = JSON.parseObject(scriptElement.html().trim()).getJSONArray("data").getJSONObject(0).getJSONObject("data")
-                    .getJSONArray("shelves").getJSONObject(0)
-                    .getJSONArray("items");
-                JSONArray data = new JSONArray();
-                CollUtil.forEach(items, (item, index) -> {
-                    JSONObject lockup = items.getJSONObject(index).getJSONObject("lockup");
-                    if (Objects.nonNull(lockup) && !"bundle".equals(items.getJSONObject(index).getString("resultType"))) {
-                        data.add(lockup);
-                    }
-                });
-                List<AppStoreSearchResultDTO> entitySearchResultList = data.toList(AppStoreSearchResultDTO.class);
-                List<GetAppListResDTO> entityResultList = entitySearchResultList.stream().map(item -> {
-                    GetAppListResDTO dto = new GetAppListResDTO();
-                    dto.setAppId(item.getAdamId());
-                    dto.setAppName(item.getTitle());
-                    dto.setAppImage(item.getIcon().getTemplate());
-                    dto.setAppDesc(item.getSubtitle());
-                    dto.setPlatform(entity);
-                    return dto;
-                }).toList();
-                resultList.addAll(entityResultList);
-            });
-            APP_LIST_CACHE.put(cacheKey, resultList.stream().collect(Collectors.toMap(
-                    GetAppListResDTO::getAppId,
-                    Function.identity(),
-                    (existingValue, newValue) -> StrUtil.equals("iphone", existingValue.getPlatform()) ? existingValue : newValue,
-                    LinkedHashMap::new))
-                .values()
-                .stream()
-                .sorted(Comparator.comparingInt(item -> {
-                    if (StrUtil.equalsIgnoreCase(item.getAppName(), reqDTO.getAppName())) {
-                        return 0;
-                    }
-                    if (StrUtil.startWithAnyIgnoreCase(item.getAppName(), reqDTO.getAppName())) {
-                        return 1;
-                    }
-                    if (StrUtil.containsAll(item.getAppName().toLowerCase(), reqDTO.getAppName().toLowerCase().split(StrUtil.EMPTY))) {
-                        return 2;
-                    }
-                    return 3;
-                })).toList());
-        }
-        return APP_LIST_CACHE.get(cacheKey);
+            if (successful == 0) throw new IllegalStateException("Apple 搜索暂不可用，请稍后重试");
+            List<GetAppListResDTO> result = found.values().stream().sorted(Comparator.comparingInt(a -> a.getAppName().equalsIgnoreCase(term) ? 0 : 1)).toList();
+            if (successful == tasks.size()) searchCache.put(key, result);
+            pending.complete(result); return result;
+        } catch (RuntimeException ex) { pending.completeExceptionally(ex); throw ex; }
+        finally { searches.remove(key, pending); }
     }
-
-    /**
-     * get app info
-     *
-     * @param appId app id
-     * @return {@link GetAppInfoResDTO }
-     */
-    public List<GetAppInfoResDTO> getAppInfo(String appId) {
-        // 无锁检查缓存
-        List<GetAppInfoResDTO> appInfoListCache = APP_INFO_CACHE.get(appId);
-        if (CollUtil.isNotEmpty(appInfoListCache)) {
-            return appInfoListCache;
-        }
-
-        // 获取锁对象（细粒度锁，按 appId 分段）
-        Object lock = LOCK_POOL.computeIfAbsent(StrUtil.format("getAppInfo-{}", appId), k -> new Object());
-
-        synchronized (lock) {
-            // 锁内再次检查缓存（双重检查）
-            appInfoListCache = APP_INFO_CACHE.get(appId);
-            if (CollUtil.isNotEmpty(appInfoListCache)) {
-                return appInfoListCache;
+    private List<GetAppListResDTO> search(String area, String term, String platform) {
+        String url = "https://apps.apple.com/" + area + "/" + platform + "/search?term=" + URLEncoder.encode(term, StandardCharsets.UTF_8);
+        try {
+            var page = client.get(url);
+            if (page.status() != 200) throw new IllegalStateException("Apple HTTP " + page.status());
+            var script = Jsoup.parse(page.body()).selectFirst("#serialized-server-data");
+            if (script == null) throw new IllegalStateException("Apple 搜索结构发生变化");
+            var data = JSON.parseObject(script.data()).getJSONArray("data").getJSONObject(0).getJSONObject("data");
+            List<GetAppListResDTO> result = new ArrayList<>();
+            JSONArray shelves = data.getJSONArray("shelves");
+            if (shelves == null) throw new IllegalStateException("缺少搜索结果 shelves");
+            for (Object s : shelves) {
+                JSONArray items = ((JSONObject) s).getJSONArray("items");
+                if (items == null) continue;
+                for (Object entry : items) {
+                    JSONObject item = (JSONObject) entry, lock = item.getJSONObject("lockup");
+                    if (lock == null || "bundle".equals(item.getString("resultType"))) continue;
+                    GetAppListResDTO dto = new GetAppListResDTO(); dto.setAppId(lock.getString("adamId")); dto.setAppName(lock.getString("title")); dto.setAppDesc(lock.getString("subtitle")); dto.setPlatform(platform);
+                    JSONObject icon = lock.getJSONObject("icon");
+                    if (icon != null && icon.getString("template") != null) dto.setAppImage(icon.getString("template").replace("{w}x{h}{c}.{f}", "512x512bb.jpg"));
+                    if (dto.getAppId() != null) result.add(dto);
+                }
             }
-            Mutable<List<GetAppInfoResDTO>> resultList = new MutableObj<>(new CopyOnWriteArrayList<>());
-            Arrays.stream(AreaEnum.values()).parallel().forEach(areaEnum -> {
-                String appStoreUrl = StrUtil.format("https://apps.apple.com/{}/app/id{}", areaEnum.getCode(), appId);
-                HttpResponse response = HttpUtil.createGet(appStoreUrl, true).execute();
-                if (!response.isOk()) {
-                    log.error("appId: {}, app not found in {} app store", appId, areaEnum.getCode());
-                    log.error("{}-{}:failed", appId, areaEnum.getCode());
-                    return;
-                } else {
-                    log.info("{}-{}:success", appId, areaEnum.getCode());
-                }
-                // 解析 HTML
-                Document doc = Jsoup.parse(response.body());
-                // 构造出参
-                GetAppInfoResDTO resDTO = new GetAppInfoResDTO();
-                resDTO.setAppId(appId);
-                resDTO.setArea(areaEnum.getCode());
-                resDTO.setAreaName(areaEnum.getName());
-                Element scriptElement = doc.selectFirst("#serialized-server-data");
-                if (Objects.isNull(scriptElement)) {
-                    log.error("appId: {}, area: {}, script element not found", appId, areaEnum.getCode());
-                    return;
-                }
-                JSONObject jsonResult = JSON.parseObject(scriptElement.html().trim()).getJSONArray("data").getJSONObject(0).getJSONObject("data");
-                // 提取应用名称
-                resDTO.setName(jsonResult.getString("title"));
-                // 提取副标题
-                resDTO.setSubtitle(jsonResult.getJSONObject("lockup").getString("subtitle"));
-                // 提取开发者信息
-                resDTO.setDeveloper(jsonResult.getJSONObject("developerAction").getString("title"));
-                resDTO.setAppStoreUrl(appStoreUrl);
-                // 提取价格信息
-                resDTO.setPrice(parsePrice(jsonResult.getJSONObject("lockup").getJSONObject("offerDisplayProperties").getString("priceFormatted"), areaEnum));
-                // 查找所有内购列表项
-                JSONArray inAppPurchaseArray = jsonResult.getJSONObject("shelfMapping").getJSONObject("information").getJSONArray("items")
-                    .toList(JSONObject.class)
-                    .stream()
-                    .filter(item -> areaEnum.getInAppPurchaseStr().equals(item.getString("title")))
-                    .findFirst()
-                    .map(item -> item.getJSONArray("items"))
-                    .map(item -> item.getJSONObject(0))
-                    .map(item -> item.getJSONArray("textPairs"))
-                    .orElse(new JSONArray());
-                // 存储解析结果
-                List<InAppPurchaseDTO> inAppPurchaseList = new ArrayList<>();
-                for (int i = 0; i < inAppPurchaseArray.size(); i++) {
-                    JSONArray jsonArray = inAppPurchaseArray.getJSONArray(i);
-                    InAppPurchaseDTO purchaseDTO = new InAppPurchaseDTO();
-                    purchaseDTO.setObject(jsonArray.getString(0));
-                    purchaseDTO.setPrice(parsePrice(jsonArray.getString(1), areaEnum));
-                    inAppPurchaseList.add(purchaseDTO);
-                }
-                resDTO.setInAppPurchaseList(inAppPurchaseList);
-                resultList.get().add(resDTO);
-            });
-            // 有售价的应用，按价格升序，有内购的应用，按内购价格升序
-            resultList.set(resultList.get().stream()
-                .sorted(Comparator.comparing(item -> item.getPrice().getCnyPrice()))
-                .sorted(Comparator.comparing(
-                    item -> item.getInAppPurchaseList().stream()
-                        .min(Comparator.comparing(ele -> ele.getPrice().getCnyPrice()))
-                        .orElse(InAppPurchaseDTO.none())
-                        .getPrice().getCnyPrice()))
-                .collect(Collectors.toList()));
-            APP_INFO_CACHE.put(appId, resultList.get());
-        }
-        return APP_INFO_CACHE.get(appId);
+            return result;
+        } catch (InterruptedException ex) { Thread.currentThread().interrupt(); throw new IllegalStateException("搜索已取消", ex); }
+        catch (Exception ex) { throw new IllegalStateException(ex.getMessage(), ex); }
     }
-
-    /**
-     * parse price
-     *
-     * @param priceStr price str
-     * @param areaEnum area enum
-     * @return {@link Money }
-     */
-    private Money parsePrice(String priceStr, AreaEnum areaEnum) {
-        if (StrUtil.isBlank(priceStr)) {
-            return new Money(areaEnum.getCurrencyCode(), BigDecimal.ZERO);
-        }
-        priceStr = priceStr.replace(areaEnum.getThousandsSeparator(), StrUtil.EMPTY);
-        if (StrUtil.DOT.equals(areaEnum.getThousandsSeparator())) {
-            priceStr = priceStr.replace(StrUtil.COMMA, StrUtil.DOT);
-        }
-        priceStr = ReUtil.get("\\d+(\\.\\d+)?", priceStr, 0);
-        return new Money(areaEnum.getCurrencyCode(), new BigDecimal(priceStr).setScale(2, RoundingMode.HALF_UP));
+    private List<Region> regions(String input) {
+        String id = AppInputParser.parse(input);
+        var futures = StorefrontRegistry.LEGACY.stream().map(registry::get).map(a -> fetcher.fetch(id, a, false)).toList();
+        return futures.stream().map(CompletableFuture::join).filter(r -> r.status() == Status.AVAILABLE).toList();
     }
-
-    /**
-     * get app info comparison
-     *
-     * @param appId app id
-     * @return {@link List }<{@link GetAppInfoComparisonResDTO }>
-     */
-    public List<GetAppInfoComparisonResDTO> getAppInfoComparison(String appId) {
-        List<GetAppInfoResDTO> appInfoList = this.getAppInfo(appId);
-        if (CollUtil.isEmpty(appInfoList)) {
-            return new ArrayList<>();
-        }
-
-        // 用于存储比较结果，key 为购买项目名称
-        Map<String, List<Money>> comparisonMap = new LinkedHashMap<>();
-
-        // 收集各地区的 App 本体价格
-        List<Money> appPriceList = appInfoList.stream()
-            .map(GetAppInfoResDTO::getPrice)
-            .collect(Collectors.toList());
-        if (CollUtil.isNotEmpty(appPriceList)) {
-            comparisonMap.put("软件本体", appPriceList);
-        }
-
-        // 收集各地区的内购价格，按内购项目名称分组
-        // 同一地区可能存在相同名称的内购项目，先按价格升序排序后再编序号区分
-        for (GetAppInfoResDTO appInfo : appInfoList) {
-            if (CollUtil.isEmpty(appInfo.getInAppPurchaseList())) {
-                continue;
-            }
-            // 先按价格升序排序
-            List<InAppPurchaseDTO> sortedPurchaseList = appInfo.getInAppPurchaseList().stream()
-                .sorted(Comparator.comparing(item -> item.getPrice().getCnyPrice()))
-                .toList();
-            // 记录当前地区每个内购项目名称出现的次数
-            Map<String, Integer> objectCountMap = new HashMap<>();
-            for (InAppPurchaseDTO purchase : sortedPurchaseList) {
-                String objectName = purchase.getObject();
-                int count = objectCountMap.getOrDefault(objectName, 0) + 1;
-                objectCountMap.put(objectName, count);
-                // 如果同名项目出现多次，使用 "名称 #序号" 的格式区分
-                String key = count > 1 ? StrUtil.format("{} #{}", objectName, count) : objectName;
-                comparisonMap.computeIfAbsent(key, k -> new ArrayList<>()).add(purchase.getPrice());
-            }
-        }
-
-        // 对每个内购项目的价格列表按人民币价格升序排序，并构建结果
-        // 最终按价格列表数量降序排序（更多地区有售的项目排在前面）
-        return comparisonMap.entrySet().stream()
-            .map(entry -> {
-                GetAppInfoComparisonResDTO resDTO = new GetAppInfoComparisonResDTO();
-                resDTO.setObject(entry.getKey());
-                resDTO.setPriceList(entry.getValue().stream()
-                    .sorted(Comparator.comparing(Money::getCnyPrice))
-                    .collect(Collectors.toList()));
-                return resDTO;
-            })
-            .sorted(Comparator.comparing((GetAppInfoComparisonResDTO item) -> item.getPriceList().size()).reversed())
-            .collect(Collectors.toList());
+    public List<GetAppInfoResDTO> getAppInfo(String id) {
+        List<Region> regions = regions(id); Rates rates = exchange.snapshot();
+        return regions.stream().map(r -> {
+            GetAppInfoResDTO dto = new GetAppInfoResDTO(); dto.setAppId(r.app().appId()); dto.setArea(r.area()); dto.setAreaName(registry.get(r.area()).nameZh());
+            dto.setName(r.app().name()); dto.setSubtitle(r.app().subtitle()); dto.setDeveloper(r.app().developer()); dto.setAppStoreUrl(r.sourceUrl()); dto.setPrice(money(r.area(), r.price(), rates));
+            dto.setInAppPurchaseList(r.items().stream().map(i -> { InAppPurchaseDTO p = new InAppPurchaseDTO(); p.setObject(i.name()); p.setPrice(money(r.area(), i.local(), rates)); return p; }).toList());
+            return dto;
+        }).toList();
     }
-
+    public List<GetAppInfoComparisonResDTO> getAppInfoComparison(String id) {
+        List<Region> regions = regions(id); Rates rates = exchange.snapshot();
+        return matcher.products(regions, rates).stream().map(p -> {
+            GetAppInfoComparisonResDTO dto = new GetAppInfoComparisonResDTO(); dto.setObject(p.name());
+            dto.setPriceList(p.prices().stream().map(v -> money(v.area(), v.local(), rates)).toList()); return dto;
+        }).toList();
+    }
+    private Money money(String code, LocalPrice local, Rates rates) {
+        if (local == null) return null;
+        Storefront area = registry.get(code);
+        return new Money(code, area.nameZh(), area.currencySymbol(), local.currency(), area.locale(), local.amount(), ExchangeRateService.convert(local, rates, "CNY"));
+    }
 }

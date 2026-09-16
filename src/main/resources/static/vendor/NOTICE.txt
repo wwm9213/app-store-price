@@ -1,0 +1,5 @@
+Alpine.js 3.13.3 — MIT — https://github.com/alpinejs/alpine/tree/v3.13.3
+Source: https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js
+Axios 1.13.2 — MIT — https://github.com/axios/axios/tree/v1.13.2
+Source: https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js
+Vendored to keep the interface available without runtime CDN requests.

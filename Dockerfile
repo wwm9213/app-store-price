@@ -1,25 +1,16 @@
-# 使用 JDK 21 作为基础镜像
+FROM --platform=$BUILDPLATFORM maven:3.9.11-eclipse-temurin-21 AS build
+WORKDIR /build
+COPY pom.xml ./
+COPY src ./src
+RUN mvn -B verify
+
 FROM amazoncorretto:21-alpine
-
-# 设置环境变量
-ENV LANG=C.UTF-8
-ENV TZ=Asia/Shanghai
-
-# 安装 tzdata 配置时区，然后删除不必要文件
-RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
-    echo "${TZ}" > /etc/timezone && \
-    apk del tzdata && \
-    rm -rf /var/cache/apk/*
-
-# 设置工作目录
+ENV LANG=C.UTF-8 TZ=Asia/Shanghai APPSTORE_DATA_DIR=/app/data
+RUN apk add --no-cache tzdata && addgroup -S app && adduser -S -G app app
 WORKDIR /app
-
-# 暴露端口
+COPY --from=build /build/target/app-store-price-*.jar /app/app.jar
+RUN mkdir /app/data && chown -R app:app /app
+USER app
 EXPOSE 8080
-
-# 复制 jar 文件到容器中
-COPY ./target/app-store-price-*.jar ./app.jar
-
-# 设置容器启动时执行的命令
-ENTRYPOINT ["java", "-jar", "app.jar"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s CMD wget -q -O /dev/null http://localhost:${PORT:-8080}/api/v2/storefronts || exit 1
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

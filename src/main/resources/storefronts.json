@@ -1,0 +1,1581 @@
+{
+  "source": "https://apps.apple.com/us/app/floating-clock/id1546947240",
+  "verifiedAt": "2026-09-16",
+  "storefronts": [
+    {
+      "code": "ae",
+      "nameZh": "阿拉伯联合酋长国",
+      "nameEn": "United Arab Emirates",
+      "region": "中东",
+      "currencyCode": "AED",
+      "currencySymbol": "AED",
+      "locale": "en-GB"
+    },
+    {
+      "code": "af",
+      "nameZh": "阿富汗",
+      "nameEn": "Afghanistan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ag",
+      "nameZh": "安提瓜和巴布达",
+      "nameEn": "Antigua & Barbuda",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ai",
+      "nameZh": "安圭拉",
+      "nameEn": "Anguilla",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "al",
+      "nameZh": "阿尔巴尼亚",
+      "nameEn": "Albania",
+      "region": "欧洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "am",
+      "nameZh": "亚美尼亚",
+      "nameEn": "Armenia",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ao",
+      "nameZh": "安哥拉",
+      "nameEn": "Angola",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ar",
+      "nameZh": "阿根廷",
+      "nameEn": "Argentina",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "at",
+      "nameZh": "奥地利",
+      "nameEn": "Austria",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "de-DE"
+    },
+    {
+      "code": "au",
+      "nameZh": "澳大利亚",
+      "nameEn": "Australia",
+      "region": "大洋洲",
+      "currencyCode": "AUD",
+      "currencySymbol": "$",
+      "locale": "en-AU"
+    },
+    {
+      "code": "az",
+      "nameZh": "阿塞拜疆",
+      "nameEn": "Azerbaijan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ba",
+      "nameZh": "波斯尼亚和黑塞哥维那",
+      "nameEn": "Bosnia & Herzegovina",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bb",
+      "nameZh": "巴巴多斯",
+      "nameEn": "Barbados",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "be",
+      "nameZh": "比利时",
+      "nameEn": "Belgium",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bf",
+      "nameZh": "布基纳法索",
+      "nameEn": "Burkina Faso",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bg",
+      "nameZh": "保加利亚",
+      "nameEn": "Bulgaria",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bh",
+      "nameZh": "巴林",
+      "nameEn": "Bahrain",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bj",
+      "nameZh": "贝宁",
+      "nameEn": "Benin",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bm",
+      "nameZh": "百慕大",
+      "nameEn": "Bermuda",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bn",
+      "nameZh": "文莱",
+      "nameEn": "Brunei",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bo",
+      "nameZh": "玻利维亚",
+      "nameEn": "Bolivia",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "br",
+      "nameZh": "巴西",
+      "nameEn": "Brazil",
+      "region": "南美",
+      "currencyCode": "BRL",
+      "currencySymbol": "R$",
+      "locale": "pt-BR"
+    },
+    {
+      "code": "bs",
+      "nameZh": "巴哈马",
+      "nameEn": "Bahamas",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bt",
+      "nameZh": "不丹",
+      "nameEn": "Bhutan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bw",
+      "nameZh": "博茨瓦纳",
+      "nameEn": "Botswana",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "by",
+      "nameZh": "白俄罗斯",
+      "nameEn": "Belarus",
+      "region": "欧洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "bz",
+      "nameZh": "伯利兹",
+      "nameEn": "Belize",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ca",
+      "nameZh": "加拿大",
+      "nameEn": "Canada",
+      "region": "北美",
+      "currencyCode": "CAD",
+      "currencySymbol": "$",
+      "locale": "en-CA"
+    },
+    {
+      "code": "cd",
+      "nameZh": "刚果（金）",
+      "nameEn": "Congo - Kinshasa",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "cg",
+      "nameZh": "刚果（布）",
+      "nameEn": "Congo - Brazzaville",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ch",
+      "nameZh": "瑞士",
+      "nameEn": "Switzerland",
+      "region": "欧洲",
+      "currencyCode": "CHF",
+      "currencySymbol": "CHF",
+      "locale": "de-CH"
+    },
+    {
+      "code": "ci",
+      "nameZh": "科特迪瓦",
+      "nameEn": "Côte d’Ivoire",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "fr-FR"
+    },
+    {
+      "code": "cl",
+      "nameZh": "智利",
+      "nameEn": "Chile",
+      "region": "南美",
+      "currencyCode": "CLP",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "cm",
+      "nameZh": "喀麦隆",
+      "nameEn": "Cameroon",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "fr-FR"
+    },
+    {
+      "code": "cn",
+      "nameZh": "中国大陆",
+      "nameEn": "China",
+      "region": "亚洲",
+      "currencyCode": "CNY",
+      "currencySymbol": "¥",
+      "locale": "zh-Hans-CN"
+    },
+    {
+      "code": "co",
+      "nameZh": "哥伦比亚",
+      "nameEn": "Colombia",
+      "region": "南美",
+      "currencyCode": "COP",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "cr",
+      "nameZh": "哥斯达黎加",
+      "nameEn": "Costa Rica",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "cv",
+      "nameZh": "佛得角",
+      "nameEn": "Cape Verde",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "cy",
+      "nameZh": "塞浦路斯",
+      "nameEn": "Cyprus",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "cz",
+      "nameZh": "捷克",
+      "nameEn": "Czechia",
+      "region": "欧洲",
+      "currencyCode": "CZK",
+      "currencySymbol": "Kč",
+      "locale": "en-GB"
+    },
+    {
+      "code": "de",
+      "nameZh": "德国",
+      "nameEn": "Germany",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "de-DE"
+    },
+    {
+      "code": "dk",
+      "nameZh": "丹麦",
+      "nameEn": "Denmark",
+      "region": "欧洲",
+      "currencyCode": "DKK",
+      "currencySymbol": "kr",
+      "locale": "en-GB"
+    },
+    {
+      "code": "dm",
+      "nameZh": "多米尼克",
+      "nameEn": "Dominica",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "do",
+      "nameZh": "多米尼加共和国",
+      "nameEn": "Dominican Republic",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "dz",
+      "nameZh": "阿尔及利亚",
+      "nameEn": "Algeria",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ec",
+      "nameZh": "厄瓜多尔",
+      "nameEn": "Ecuador",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "ee",
+      "nameZh": "爱沙尼亚",
+      "nameEn": "Estonia",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "eg",
+      "nameZh": "埃及",
+      "nameEn": "Egypt",
+      "region": "非洲",
+      "currencyCode": "EGP",
+      "currencySymbol": "E£",
+      "locale": "en-GB"
+    },
+    {
+      "code": "es",
+      "nameZh": "西班牙",
+      "nameEn": "Spain",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "es-ES"
+    },
+    {
+      "code": "fi",
+      "nameZh": "芬兰",
+      "nameEn": "Finland",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "fj",
+      "nameZh": "斐济",
+      "nameEn": "Fiji",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "fm",
+      "nameZh": "密克罗尼西亚",
+      "nameEn": "Micronesia",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "fr",
+      "nameZh": "法国",
+      "nameEn": "France",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "fr-FR"
+    },
+    {
+      "code": "ga",
+      "nameZh": "加蓬",
+      "nameEn": "Gabon",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "fr-FR"
+    },
+    {
+      "code": "gb",
+      "nameZh": "英国",
+      "nameEn": "United Kingdom",
+      "region": "欧洲",
+      "currencyCode": "GBP",
+      "currencySymbol": "£",
+      "locale": "en-GB"
+    },
+    {
+      "code": "gd",
+      "nameZh": "格林纳达",
+      "nameEn": "Grenada",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ge",
+      "nameZh": "格鲁吉亚",
+      "nameEn": "Georgia",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "gh",
+      "nameZh": "加纳",
+      "nameEn": "Ghana",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "gm",
+      "nameZh": "冈比亚",
+      "nameEn": "Gambia",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "gr",
+      "nameZh": "希腊",
+      "nameEn": "Greece",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "gt",
+      "nameZh": "危地马拉",
+      "nameEn": "Guatemala",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "gw",
+      "nameZh": "几内亚比绍",
+      "nameEn": "Guinea-Bissau",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "gy",
+      "nameZh": "圭亚那",
+      "nameEn": "Guyana",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "hk",
+      "nameZh": "香港",
+      "nameEn": "Hong Kong SAR China",
+      "region": "亚洲",
+      "currencyCode": "HKD",
+      "currencySymbol": "$",
+      "locale": "zh-Hant-HK"
+    },
+    {
+      "code": "hn",
+      "nameZh": "洪都拉斯",
+      "nameEn": "Honduras",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "hr",
+      "nameZh": "克罗地亚",
+      "nameEn": "Croatia",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "hu",
+      "nameZh": "匈牙利",
+      "nameEn": "Hungary",
+      "region": "欧洲",
+      "currencyCode": "HUF",
+      "currencySymbol": "Ft",
+      "locale": "en-GB"
+    },
+    {
+      "code": "id",
+      "nameZh": "印度尼西亚",
+      "nameEn": "Indonesia",
+      "region": "亚洲",
+      "currencyCode": "IDR",
+      "currencySymbol": "Rp",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ie",
+      "nameZh": "爱尔兰",
+      "nameEn": "Ireland",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "il",
+      "nameZh": "以色列",
+      "nameEn": "Israel",
+      "region": "中东",
+      "currencyCode": "ILS",
+      "currencySymbol": "₪",
+      "locale": "en-GB"
+    },
+    {
+      "code": "in",
+      "nameZh": "印度",
+      "nameEn": "India",
+      "region": "亚洲",
+      "currencyCode": "INR",
+      "currencySymbol": "₹",
+      "locale": "en-GB"
+    },
+    {
+      "code": "iq",
+      "nameZh": "伊拉克",
+      "nameEn": "Iraq",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "is",
+      "nameZh": "冰岛",
+      "nameEn": "Iceland",
+      "region": "欧洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "it",
+      "nameZh": "意大利",
+      "nameEn": "Italy",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "it"
+    },
+    {
+      "code": "jm",
+      "nameZh": "牙买加",
+      "nameEn": "Jamaica",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "jo",
+      "nameZh": "约旦",
+      "nameEn": "Jordan",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "jp",
+      "nameZh": "日本",
+      "nameEn": "Japan",
+      "region": "亚洲",
+      "currencyCode": "JPY",
+      "currencySymbol": "¥",
+      "locale": "ja"
+    },
+    {
+      "code": "ke",
+      "nameZh": "肯尼亚",
+      "nameEn": "Kenya",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "kg",
+      "nameZh": "吉尔吉斯斯坦",
+      "nameEn": "Kyrgyzstan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "kh",
+      "nameZh": "柬埔寨",
+      "nameEn": "Cambodia",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "kn",
+      "nameZh": "圣基茨和尼维斯",
+      "nameEn": "St. Kitts & Nevis",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "kr",
+      "nameZh": "韩国",
+      "nameEn": "South Korea",
+      "region": "亚洲",
+      "currencyCode": "KRW",
+      "currencySymbol": "₩",
+      "locale": "ko"
+    },
+    {
+      "code": "kw",
+      "nameZh": "科威特",
+      "nameEn": "Kuwait",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ky",
+      "nameZh": "开曼群岛",
+      "nameEn": "Cayman Islands",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "kz",
+      "nameZh": "哈萨克斯坦",
+      "nameEn": "Kazakhstan",
+      "region": "亚洲",
+      "currencyCode": "KZT",
+      "currencySymbol": "₸",
+      "locale": "en-GB"
+    },
+    {
+      "code": "la",
+      "nameZh": "老挝",
+      "nameEn": "Laos",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lb",
+      "nameZh": "黎巴嫩",
+      "nameEn": "Lebanon",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lc",
+      "nameZh": "圣卢西亚",
+      "nameEn": "St. Lucia",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lk",
+      "nameZh": "斯里兰卡",
+      "nameEn": "Sri Lanka",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lr",
+      "nameZh": "利比里亚",
+      "nameEn": "Liberia",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lt",
+      "nameZh": "立陶宛",
+      "nameEn": "Lithuania",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lu",
+      "nameZh": "卢森堡",
+      "nameEn": "Luxembourg",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "lv",
+      "nameZh": "拉脱维亚",
+      "nameEn": "Latvia",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ly",
+      "nameZh": "利比亚",
+      "nameEn": "Libya",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ma",
+      "nameZh": "摩洛哥",
+      "nameEn": "Morocco",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "md",
+      "nameZh": "摩尔多瓦",
+      "nameEn": "Moldova",
+      "region": "欧洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "me",
+      "nameZh": "黑山",
+      "nameEn": "Montenegro",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mg",
+      "nameZh": "马达加斯加",
+      "nameEn": "Madagascar",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mk",
+      "nameZh": "北马其顿",
+      "nameEn": "North Macedonia",
+      "region": "欧洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ml",
+      "nameZh": "马里",
+      "nameEn": "Mali",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mm",
+      "nameZh": "缅甸",
+      "nameEn": "Myanmar (Burma)",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mn",
+      "nameZh": "蒙古",
+      "nameEn": "Mongolia",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mo",
+      "nameZh": "澳门",
+      "nameEn": "Macao SAR China",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "zh-Hant-HK"
+    },
+    {
+      "code": "mr",
+      "nameZh": "毛里塔尼亚",
+      "nameEn": "Mauritania",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ms",
+      "nameZh": "蒙特塞拉特",
+      "nameEn": "Montserrat",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mt",
+      "nameZh": "马耳他",
+      "nameEn": "Malta",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mu",
+      "nameZh": "毛里求斯",
+      "nameEn": "Mauritius",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mv",
+      "nameZh": "马尔代夫",
+      "nameEn": "Maldives",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mw",
+      "nameZh": "马拉维",
+      "nameEn": "Malawi",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mx",
+      "nameZh": "墨西哥",
+      "nameEn": "Mexico",
+      "region": "北美",
+      "currencyCode": "MXN",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "my",
+      "nameZh": "马来西亚",
+      "nameEn": "Malaysia",
+      "region": "亚洲",
+      "currencyCode": "MYR",
+      "currencySymbol": "RM",
+      "locale": "en-GB"
+    },
+    {
+      "code": "mz",
+      "nameZh": "莫桑比克",
+      "nameEn": "Mozambique",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "na",
+      "nameZh": "纳米比亚",
+      "nameEn": "Namibia",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ne",
+      "nameZh": "尼日尔",
+      "nameEn": "Niger",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ng",
+      "nameZh": "尼日利亚",
+      "nameEn": "Nigeria",
+      "region": "非洲",
+      "currencyCode": "NGN",
+      "currencySymbol": "₦",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ni",
+      "nameZh": "尼加拉瓜",
+      "nameEn": "Nicaragua",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "nl",
+      "nameZh": "荷兰",
+      "nameEn": "Netherlands",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "nl"
+    },
+    {
+      "code": "no",
+      "nameZh": "挪威",
+      "nameEn": "Norway",
+      "region": "欧洲",
+      "currencyCode": "NOK",
+      "currencySymbol": "kr",
+      "locale": "en-GB"
+    },
+    {
+      "code": "np",
+      "nameZh": "尼泊尔",
+      "nameEn": "Nepal",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "nr",
+      "nameZh": "瑙鲁",
+      "nameEn": "Nauru",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "nz",
+      "nameZh": "新西兰",
+      "nameEn": "New Zealand",
+      "region": "大洋洲",
+      "currencyCode": "NZD",
+      "currencySymbol": "$",
+      "locale": "en-AU"
+    },
+    {
+      "code": "om",
+      "nameZh": "阿曼",
+      "nameEn": "Oman",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "pa",
+      "nameZh": "巴拿马",
+      "nameEn": "Panama",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "pe",
+      "nameZh": "秘鲁",
+      "nameEn": "Peru",
+      "region": "南美",
+      "currencyCode": "PEN",
+      "currencySymbol": "PEN",
+      "locale": "es-MX"
+    },
+    {
+      "code": "pg",
+      "nameZh": "巴布亚新几内亚",
+      "nameEn": "Papua New Guinea",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ph",
+      "nameZh": "菲律宾",
+      "nameEn": "Philippines",
+      "region": "亚洲",
+      "currencyCode": "PHP",
+      "currencySymbol": "₱",
+      "locale": "en-GB"
+    },
+    {
+      "code": "pk",
+      "nameZh": "巴基斯坦",
+      "nameEn": "Pakistan",
+      "region": "亚洲",
+      "currencyCode": "PKR",
+      "currencySymbol": "Rs",
+      "locale": "en-GB"
+    },
+    {
+      "code": "pl",
+      "nameZh": "波兰",
+      "nameEn": "Poland",
+      "region": "欧洲",
+      "currencyCode": "PLN",
+      "currencySymbol": "zł",
+      "locale": "en-GB"
+    },
+    {
+      "code": "pt",
+      "nameZh": "葡萄牙",
+      "nameEn": "Portugal",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "pt-PT"
+    },
+    {
+      "code": "pw",
+      "nameZh": "帕劳",
+      "nameEn": "Palau",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "py",
+      "nameZh": "巴拉圭",
+      "nameEn": "Paraguay",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "qa",
+      "nameZh": "卡塔尔",
+      "nameEn": "Qatar",
+      "region": "中东",
+      "currencyCode": "QAR",
+      "currencySymbol": "QAR",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ro",
+      "nameZh": "罗马尼亚",
+      "nameEn": "Romania",
+      "region": "欧洲",
+      "currencyCode": "RON",
+      "currencySymbol": "lei",
+      "locale": "en-GB"
+    },
+    {
+      "code": "rs",
+      "nameZh": "塞尔维亚",
+      "nameEn": "Serbia",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ru",
+      "nameZh": "俄罗斯",
+      "nameEn": "Russia",
+      "region": "欧洲",
+      "currencyCode": "RUB",
+      "currencySymbol": "₽",
+      "locale": "ru"
+    },
+    {
+      "code": "rw",
+      "nameZh": "卢旺达",
+      "nameEn": "Rwanda",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sa",
+      "nameZh": "沙特阿拉伯",
+      "nameEn": "Saudi Arabia",
+      "region": "中东",
+      "currencyCode": "SAR",
+      "currencySymbol": "SAR",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sb",
+      "nameZh": "所罗门群岛",
+      "nameEn": "Solomon Islands",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sc",
+      "nameZh": "塞舌尔",
+      "nameEn": "Seychelles",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "se",
+      "nameZh": "瑞典",
+      "nameEn": "Sweden",
+      "region": "欧洲",
+      "currencyCode": "SEK",
+      "currencySymbol": "kr",
+      "locale": "sv"
+    },
+    {
+      "code": "sg",
+      "nameZh": "新加坡",
+      "nameEn": "Singapore",
+      "region": "亚洲",
+      "currencyCode": "SGD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "si",
+      "nameZh": "斯洛文尼亚",
+      "nameEn": "Slovenia",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sk",
+      "nameZh": "斯洛伐克",
+      "nameEn": "Slovakia",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sl",
+      "nameZh": "塞拉利昂",
+      "nameEn": "Sierra Leone",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sn",
+      "nameZh": "塞内加尔",
+      "nameEn": "Senegal",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sr",
+      "nameZh": "苏里南",
+      "nameEn": "Suriname",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "st",
+      "nameZh": "圣多美和普林西比",
+      "nameEn": "São Tomé & Príncipe",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "sv",
+      "nameZh": "萨尔瓦多",
+      "nameEn": "El Salvador",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "sz",
+      "nameZh": "斯威士兰",
+      "nameEn": "Eswatini",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tc",
+      "nameZh": "特克斯和凯科斯群岛",
+      "nameEn": "Turks & Caicos Islands",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "td",
+      "nameZh": "乍得",
+      "nameEn": "Chad",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "th",
+      "nameZh": "泰国",
+      "nameEn": "Thailand",
+      "region": "亚洲",
+      "currencyCode": "THB",
+      "currencySymbol": "฿",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tj",
+      "nameZh": "塔吉克斯坦",
+      "nameEn": "Tajikistan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tm",
+      "nameZh": "土库曼斯坦",
+      "nameEn": "Turkmenistan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tn",
+      "nameZh": "突尼斯",
+      "nameEn": "Tunisia",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "to",
+      "nameZh": "汤加",
+      "nameEn": "Tonga",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tr",
+      "nameZh": "土耳其",
+      "nameEn": "Türkiye",
+      "region": "中东",
+      "currencyCode": "TRY",
+      "currencySymbol": "₺",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tt",
+      "nameZh": "特立尼达和多巴哥",
+      "nameEn": "Trinidad & Tobago",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "tw",
+      "nameZh": "台湾",
+      "nameEn": "Taiwan",
+      "region": "亚洲",
+      "currencyCode": "TWD",
+      "currencySymbol": "$",
+      "locale": "zh-Hant-TW"
+    },
+    {
+      "code": "tz",
+      "nameZh": "坦桑尼亚",
+      "nameEn": "Tanzania",
+      "region": "非洲",
+      "currencyCode": "TZS",
+      "currencySymbol": "TZS",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ua",
+      "nameZh": "乌克兰",
+      "nameEn": "Ukraine",
+      "region": "欧洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ug",
+      "nameZh": "乌干达",
+      "nameEn": "Uganda",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "us",
+      "nameZh": "美国",
+      "nameEn": "United States",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-US"
+    },
+    {
+      "code": "uy",
+      "nameZh": "乌拉圭",
+      "nameEn": "Uruguay",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "uz",
+      "nameZh": "乌兹别克斯坦",
+      "nameEn": "Uzbekistan",
+      "region": "亚洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "vc",
+      "nameZh": "圣文森特和格林纳丁斯",
+      "nameEn": "St. Vincent & Grenadines",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ve",
+      "nameZh": "委内瑞拉",
+      "nameEn": "Venezuela",
+      "region": "南美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "es-MX"
+    },
+    {
+      "code": "vg",
+      "nameZh": "英属维尔京群岛",
+      "nameEn": "British Virgin Islands",
+      "region": "北美",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "vn",
+      "nameZh": "越南",
+      "nameEn": "Vietnam",
+      "region": "亚洲",
+      "currencyCode": "VND",
+      "currencySymbol": "₫",
+      "locale": "en-GB"
+    },
+    {
+      "code": "vu",
+      "nameZh": "瓦努阿图",
+      "nameEn": "Vanuatu",
+      "region": "大洋洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "xk",
+      "nameZh": "科索沃",
+      "nameEn": "Kosovo",
+      "region": "欧洲",
+      "currencyCode": "EUR",
+      "currencySymbol": "€",
+      "locale": "en-GB"
+    },
+    {
+      "code": "ye",
+      "nameZh": "也门",
+      "nameEn": "Yemen",
+      "region": "中东",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "za",
+      "nameZh": "南非",
+      "nameEn": "South Africa",
+      "region": "非洲",
+      "currencyCode": "ZAR",
+      "currencySymbol": "R",
+      "locale": "en-GB"
+    },
+    {
+      "code": "zm",
+      "nameZh": "赞比亚",
+      "nameEn": "Zambia",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    },
+    {
+      "code": "zw",
+      "nameZh": "津巴布韦",
+      "nameEn": "Zimbabwe",
+      "region": "非洲",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "locale": "en-GB"
+    }
+  ]
+}

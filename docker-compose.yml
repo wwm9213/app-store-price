@@ -1,8 +1,20 @@
 services:
   app-store-price:
     build: .
-    image: app-store-price:latest
-    container_name: app-store-price
+    image: app-store-price:local
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      APPSTORE_FETCH_CONCURRENCY: ${APPSTORE_FETCH_CONCURRENCY:-8}
+      APPSTORE_CACHE_HOURS: ${APPSTORE_CACHE_HOURS:-6}
+      APPSTORE_REQUEST_TIMEOUT: ${APPSTORE_REQUEST_TIMEOUT:-10000}
+      APPSTORE_RETRY_COUNT: ${APPSTORE_RETRY_COUNT:-2}
+      APPSTORE_QUEUE_CAPACITY: ${APPSTORE_QUEUE_CAPACITY:-2048}
+      APPSTORE_MAX_QUERIES: ${APPSTORE_MAX_QUERIES:-16}
+      EXCHANGE_RATE_CACHE_HOURS: ${EXCHANGE_RATE_CACHE_HOURS:-6}
+      APPSTORE_DATA_DIR: /app/data
+    volumes:
+      - exchange-cache:/app/data
+volumes:
+  exchange-cache:
