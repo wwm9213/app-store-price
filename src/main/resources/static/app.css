@@ -307,3 +307,6 @@ footer { max-width: 1240px; margin: auto; padding: 22px 0 30px; border-top: 1px 
   .dialog-tools { gap: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.price-age { display: block; margin-top: 5px; font-size: 10px; line-height: 1.6; color: var(--muted); overflow-wrap: anywhere; }
+.price-age.warning { color: #b48b32; }

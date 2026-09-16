@@ -19,16 +19,20 @@ function csvCell(value) {
     return '"' + text.replaceAll('"', '""') + '"';
 }
 function exportCsv(snapshot) {
-    const columns = ['App','AppID','Product','ProductKey','Country','CountryCode','LocalPrice','Currency','FormattedPrice','CNY','USD','ExchangeRate','RateAsOf','FetchedAt','Status','MatchStatus','SourceURL','QueryComplete','RecordType','MatchEvidence','Type','Period','Issues','Coverage','QueryStartedAt','CompletedRegions','TotalRegions'];
+    const columns = ['App','AppID','Product','ProductKey','Country','CountryCode','LocalPrice','Currency','FormattedPrice','CNY','USD','ExchangeRate','RateAsOf','FetchedAt','Status','MatchStatus','SourceURL','QueryComplete','RecordType','MatchEvidence','Type','Period','Issues','Coverage','QueryStartedAt','CompletedRegions','TotalRegions','RetainedPrice','UpdateStatus','LastAttemptAt','UpdateError'];
     const rows = [columns];
+    const update = area => {
+        const r = snapshot.regions.find(r => r.area === area);
+        return [(snapshot.retainedRegions || []).some(r => r.area === area), snapshot.refreshError ? 'CONNECTION_FAILED' : r?.status || 'PENDING', r?.fetchedAt || '', snapshot.refreshError || r?.message || ''];
+    };
     for (const product of snapshot.products) for (const p of product.prices) rows.push([
         snapshot.app?.name, snapshot.appId, p.name, product.productKey, p.areaName, p.area, p.local.amount, p.local.currency, p.local.formatted,
         p.cny, p.usd, p.exchangeRate, p.rateAsOf, p.fetchedAt, p.local.amount == null ? 'PARSE_FAILED' : 'AVAILABLE', p.matchStatus, p.sourceUrl, snapshot.progress.complete,
-        'PRICE', p.matchEvidence, product.type, product.period, '', '', snapshot.startedAt, snapshot.progress.completed, snapshot.progress.total
+        'PRICE', p.matchEvidence, product.type, product.period, '', '', snapshot.startedAt, snapshot.progress.completed, snapshot.progress.total, ...update(p.area)
     ]);
     for (const region of snapshot.regions) rows.push([
         region.app?.name || snapshot.app?.name, snapshot.appId, '', '', '', region.area, '', '', '', '', '', '', snapshot.exchangeRates?.asOf, region.fetchedAt, region.status, '', region.sourceUrl, snapshot.progress.complete,
-        'REGION', '', '', '', [region.message, ...(region.issues || [])].filter(Boolean).join('; '), region.iapCoverage, snapshot.startedAt, snapshot.progress.completed, snapshot.progress.total
+        'REGION', '', '', '', [region.message, ...(region.issues || [])].filter(Boolean).join('; '), region.iapCoverage, snapshot.startedAt, snapshot.progress.completed, snapshot.progress.total, ...update(region.area)
     ]);
     return '\uFEFF' + rows.map(row => row.map(csvCell).join(',')).join('\r\n');
 }
@@ -68,6 +72,32 @@ function groupProducts(products) {
 
 const CACHE_KEY = 'appStorePrice.snapshots.v2';
 const CACHE_TTL = 6 * 60 * 60 * 1000;
+const FRESH_TTL = 15 * 60 * 1000;
+function snapshotFresh(snapshot, now = Date.now()) {
+    return !!snapshot?.progress.complete && !snapshot.refreshError && !(snapshot.retainedRegions || []).length
+        && snapshot.regions.length === snapshot.areas.length && snapshot.regions.every(r =>
+            ['AVAILABLE','UNAVAILABLE'].includes(r.status) && Date.parse(r.fetchedAt) + FRESH_TTL > now);
+}
+function retainPrices(data, previous, now = Date.now()) {
+    const same = previous?.appId === data.appId;
+    const retained = new Map();
+    for (const r of [...(same ? [...(previous.retainedRegions || []), ...previous.regions] : []), ...(data.retainedRegions || [])]) {
+        if (r.status !== 'AVAILABLE' || !data.areas.includes(r.area) || Date.parse(r.fetchedAt) + CACHE_TTL <= now) continue;
+        if (!retained.has(r.area) || Date.parse(retained.get(r.area).fetchedAt) < Date.parse(r.fetchedAt)) retained.set(r.area,r);
+    }
+    for (const r of data.regions) if (['AVAILABLE','UNAVAILABLE'].includes(r.status)) retained.delete(r.area);
+    const localAreas = new Set([...retained.values()].filter(r => !(data.retainedRegions || [])
+        .some(server => server.area === r.area && Date.parse(server.fetchedAt) >= Date.parse(r.fetchedAt))).map(r => r.area));
+    const products = new Map(data.products.map(p => [p.productKey,{...p,prices:p.prices.filter(r => !localAreas.has(r.area))}]));
+    if (same) for (const p of previous.products) {
+        const old = p.prices.filter(r => localAreas.has(r.area));
+        if (!old.length) continue;
+        const current = products.get(p.productKey);
+        products.set(p.productKey,current ? {...current,prices:[...current.prices,...old]} : {...p,prices:old});
+    }
+    return {...data,app:data.app || (same ? previous.app : null),retainedRegions:[...retained.values()],
+        products:[...products.values()].filter(p => p.prices.length)};
+}
 function cacheKey(id, areas) { return `${id}:${[...new Set(areas)].sort().join(',')}`; }
 function cacheEntries(storage = localStorage, now = Date.now()) {
     try { return (JSON.parse(storage.getItem(CACHE_KEY)) || []).filter(e => e.expiresAt > now && e.snapshot?.progress?.complete); }
@@ -78,7 +108,7 @@ function cachedSnapshot(id, areas, storage = localStorage, now = Date.now()) {
 }
 function cacheSnapshot(snapshot, storage = localStorage, now = Date.now()) {
     if (!snapshot.progress.complete || !snapshot.areas?.length) return false;
-    const observed = snapshot.regions.map(r => Date.parse(r.fetchedAt)).filter(Number.isFinite);
+    const observed = [...snapshot.regions,...(snapshot.retainedRegions || [])].map(r => Date.parse(r.fetchedAt)).filter(Number.isFinite);
     const entry = {key:cacheKey(snapshot.appId, snapshot.areas), expiresAt:Math.min(now, ...observed) + CACHE_TTL, snapshot};
     if (JSON.stringify(entry).length > 1800000) return false;
     const entries = [entry, ...cacheEntries(storage, now).filter(e => e.key !== entry.key)].slice(0, 5);
@@ -132,7 +162,7 @@ function appStore() {
         input:'', searchArea:'us', storefronts:[], mainstream:[], scope:readSetting('queryScope','mainstream'),
         myAreas:readSetting('myAreas',[]), managing:false, draftAreas:[], areaSearch:'', cacheCount:0,
         candidates:[], searching:false, error:'', notice:'', snapshot:null, groups:[], stream:null, requestController:null,
-        currentId:'', selectedKey:'app', queryAreas:[], sharedAreas:[], generation:0, loading:false, fromCache:false,
+        currentId:'', selectedKey:'app', queryAreas:[], sharedAreas:[], generation:0, loading:false, fromCache:false, requestStartedAt:0,
         productSearch:'', category:'main', benchmark:'us', sort:'cnyAsc', regionFilter:'', countrySearch:'',
         showUnavailable:false, detailMode:false, colorMode:readSetting('colorMode','system'),
         regions:['亚洲','欧洲','北美','南美','中东','非洲','大洋洲'],
@@ -210,11 +240,24 @@ function appStore() {
                 : this.sort === 'cnyDesc' ? (a.cny == null)-(b.cny == null) || n(b.cny)-n(a.cny) : n(a.cny)-n(b.cny));
             return rows;
         },
-        get validPrices() { return this.product?.comparable ? this.product.rows.filter(p => p.cny != null && p.local.amount != null) : []; },
+        retained(area) { return (this.snapshot?.retainedRegions || []).some(r => r.area === area); },
+        get queryStatus() {
+            if (this.loading) return this.snapshot?.products.length ? '正在更新 · 缓存价格仍可查看' : '正在获取所选地区价格';
+            if (this.snapshot?.refreshError) return '更新失败 · 已保留上次数据';
+            if (this.snapshot?.progress.complete) return this.snapshot.progress.failed ? '更新完成 · 部分地区失败' : this.fromCache ? '缓存数据（15 分钟内）' : '更新完成';
+            return '等待连接';
+        },
+        timeText(value) { return value ? new Date(value).toLocaleString('zh-CN',{hour12:false}) : '未知'; },
+        priceState(p) {
+            if (!this.retained(p.area)) return '抓取于 ' + this.timeText(p.fetchedAt);
+            const result = this.snapshot?.regions.find(r => r.area === p.area);
+            return (this.snapshot?.refreshError || result ? '更新失败，显示上次数据' : '正在更新，显示缓存') + ' · ' + this.timeText(p.fetchedAt);
+        },
+        get validPrices() { return this.product?.comparable ? this.product.rows.filter(p => !this.retained(p.area) && p.cny != null && p.local.amount != null) : []; },
         get lowest() { return this.validPrices.length ? Math.min(...this.validPrices.map(p => Number(p.cny))) : null; },
         get highest() { return this.validPrices.length ? Math.max(...this.validPrices.map(p => Number(p.cny))) : null; },
         get failedRegions() { return (this.snapshot?.regions || []).filter(r => r.status !== 'AVAILABLE' && (this.showUnavailable || r.status !== 'UNAVAILABLE') && this.matches(r.area)); },
-        get localDetails() { return (this.snapshot?.regions || []).filter(r => r.status === 'AVAILABLE' && this.matches(r.area)); },
+        get localDetails() { return [...(this.snapshot?.regions || []),...(this.snapshot?.retainedRegions || [])].filter(r => r.status === 'AVAILABLE' && this.matches(r.area)); },
         get favorites() { return this.myAreas.filter(code => this.queryAreas.includes(code)); },
         myPrice(code) { return this.product?.rows.find(p => p.area === code); },
         state(code) {
@@ -232,12 +275,13 @@ function appStore() {
         },
         localText(p) { return !p ? '' : p.quotes.length === 1 ? p.local.formatted || '解析失败' : `${p.quotes.length} 档公开报价`; },
         delta(p) {
+            if (this.retained(p.area) || this.retained(this.benchmark)) return '等待最新价格';
             if (!this.product?.comparable) return '多档 / 身份待确认';
             if (p.area === this.benchmark) return '基准地区';
             const value = percentage(p.cny,this.product.rows.find(p => p.area === this.benchmark)?.cny);
             return value == null ? '暂无基准价' : Math.abs(value) < .05 ? '与基准相同' : `${value < 0 ? '便宜' : '贵'} ${Math.abs(value).toFixed(1)}%`;
         },
-        rank(p) { return !this.product?.comparable || p.cny == null ? '—' : this.validPrices.filter(x => Number(x.cny) < Number(p.cny)).length+1; },
+        rank(p) { return this.retained(p.area) || !this.product?.comparable || p.cny == null ? '—' : this.validPrices.filter(x => Number(x.cny) < Number(p.cny)).length+1; },
         disconnect() {
             this.requestController?.abort(); this.requestController = null;
             if (this.stream) this.stream.close();
@@ -248,7 +292,10 @@ function appStore() {
             this.notice = '已取消本次等待';
         },
         applySnapshot(data) {
+            data = retainPrices(data, this.snapshot);
             this.snapshot = data; this.groups = groupProducts(data.products); this.queryAreas = data.areas;
+            this.fromCache = snapshotFresh(data) && data.regions.length > 0
+                && data.regions.every(r => Date.parse(r.fetchedAt) < this.requestStartedAt);
             if (data.progress.complete && !this.groups.some(p => p.key === this.selectedKey)) this.selectedKey = this.groups[0]?.key || 'app';
         },
         async search() {
@@ -276,12 +323,19 @@ function appStore() {
             const selected = [...(areas || this.activeAreas)];
             if (!selected.length) { this.error = '请至少选择一个地区'; return; }
             if (this.currentId !== id) { this.selectedKey = 'app'; this.category = 'main'; this.productSearch = ''; }
-            this.currentId = id; this.queryAreas = selected;
+            const previous = this.snapshot?.appId === id && cacheKey(id,this.snapshot.areas) === cacheKey(id,selected) ? this.snapshot : null;
+            this.currentId = id; this.queryAreas = selected; this.requestStartedAt = Date.now();
             this.snapshot = null; this.groups = [];
-            const cached = !retryFailed && !refresh && cachedSnapshot(id,selected);
-            if (cached) { this.applySnapshot(cached); this.fromCache = true; return; }
+            const cached = previous || cachedSnapshot(id,selected);
+            if (cached) {
+                this.applySnapshot(cached); this.fromCache = true;
+                if (!retryFailed && !refresh && snapshotFresh(cached)) return;
+                this.applySnapshot({...cached, regions:[], products:[], retainedRegions:[], refreshError:null,
+                    startedAt:new Date(this.requestStartedAt).toISOString(),queryId:null,
+                    progress:{total:selected.length,completed:0,available:0,unavailable:0,failed:0,complete:false}});
+            }
             this.loading = true;
-            const params = new URLSearchParams({scope:'custom',areas:selected.join(','),priority:this.myAreas.join(','),retryFailed:String(retryFailed)});
+            const params = new URLSearchParams({scope:'custom',areas:selected.join(','),priority:this.myAreas.join(','),retryFailed:String(retryFailed),refresh:String(refresh)});
             try {
                 this.requestController = new AbortController();
                 const response = await axios.get(`/api/v2/apps/${encodeURIComponent(id)}/prices?${params}`,{signal:this.requestController.signal});
@@ -290,12 +344,14 @@ function appStore() {
                 this.applySnapshot(response.data.data);
                 if (this.snapshot.progress.complete) { this.loading = false; cacheSnapshot(this.snapshot); return; }
             } catch (e) {
-                if (generation === this.generation) { this.error = e.response?.data?.message || e.message; this.loading = false; }
+                if (generation === this.generation) this.queryFailed(e.response?.data?.message || e.message);
                 return;
             } finally {
                 if (generation === this.generation) this.requestController = null;
             }
             params.set('retryFailed','false');
+            params.set('refresh','false');
+            params.set('queryId',this.snapshot.queryId);
             const stream = new EventSource(`/api/v2/apps/${encodeURIComponent(id)}/prices/stream?${params}`); this.stream = stream;
             let interruptions = 0;
             const update = e => {
@@ -309,9 +365,13 @@ function appStore() {
             });
             stream.onerror = () => {
                 if (generation !== this.generation || this.snapshot?.progress.complete) return;
-                if (++interruptions >= 3) { this.disconnect(); this.error = '连接暂不可用，请重新查询；已获取结果仍可查看。'; }
+                if (++interruptions >= 3) { this.disconnect(); this.queryFailed('连接暂不可用，请获取最新价格重试；已获取结果仍可查看。'); }
                 else this.notice = '连接中断，正在重连…';
             };
+        },
+        queryFailed(message) {
+            this.error = message; this.loading = false;
+            if (this.snapshot) this.snapshot = {...this.snapshot, refreshError:message, progress:{...this.snapshot.progress,complete:false}};
         },
         async share() {
             const url = new URL(location.pathname,location.origin);
@@ -329,4 +389,4 @@ function appStore() {
         }
     };
 }
-if (typeof module !== 'undefined') module.exports = {appStore,searchableSelect,filterOptions,parseAppInput,percentage,csvCell,exportCsv,groupProducts,cacheKey,cacheEntries,cachedSnapshot,cacheSnapshot,CACHE_KEY,CACHE_TTL};
+if (typeof module !== 'undefined') module.exports = {appStore,searchableSelect,filterOptions,parseAppInput,percentage,csvCell,exportCsv,groupProducts,cacheKey,cacheEntries,cachedSnapshot,cacheSnapshot,snapshotFresh,retainPrices,CACHE_KEY,CACHE_TTL,FRESH_TTL};

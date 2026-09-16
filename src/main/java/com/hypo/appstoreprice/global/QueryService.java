@@ -18,37 +18,61 @@ public class QueryService {
     private final Settings settings;
     private final Map<String, Query> active = new HashMap<>();
     private final Cache<String, Query> completed;
+    private final Cache<String, Query> sessions;
     private final ExecutorService orchestration = Executors.newVirtualThreadPerTaskExecutor();
     private final ScheduledExecutorService heartbeat = Executors.newSingleThreadScheduledExecutor();
 
     public QueryService(StorefrontRegistry registry, AppFetcher fetcher, ExchangeRateService exchange, ProductMatcher matcher, Settings settings) {
         this.registry = registry; this.fetcher = fetcher; this.exchange = exchange; this.matcher = matcher; this.settings = settings;
         completed = CacheBuilder.newBuilder().maximumSize(64).expireAfterWrite(Duration.ofHours(settings.cacheHours)).build();
+        sessions = CacheBuilder.newBuilder().maximumSize(256).expireAfterWrite(Duration.ofHours(6)).build();
         heartbeat.scheduleAtFixedRate(this::heartbeat, 15, 15, TimeUnit.SECONDS);
     }
     public synchronized Query query(String input, List<String> priority, boolean retryFailed) {
         return query(input, priority, retryFailed, List.of(), "mainstream");
     }
     public synchronized Query query(String input, List<String> priority, boolean retryFailed, List<String> areas, String scope) {
+        return query(input, priority, retryFailed, areas, scope, false);
+    }
+    private static String key(String id, List<Storefront> areas) {
+        return id + ":" + String.join(",", areas.stream().map(Storefront::code).sorted().toList());
+    }
+    public synchronized Query resume(String input, List<String> areas, String scope, String queryId) {
+        String expected = key(AppInputParser.parse(input), registry.selected(areas, scope, List.of()));
+        Query q = sessions.getIfPresent(queryId);
+        if (q == null || !q.key.equals(expected)) throw new IllegalArgumentException("查询已过期或地区不一致，请重新查询");
+        return q;
+    }
+    public synchronized Query query(String input, List<String> priority, boolean retryFailed, List<String> areas, String scope, boolean refresh) {
         String id = AppInputParser.parse(input);
         List<Storefront> order = registry.selected(areas, scope, priority);
-        String key = id + ":" + String.join(",", order.stream().map(Storefront::code).sorted().toList());
-        if (active.containsKey(key)) return active.get(key);
+        String key = key(id, order);
+        // A force request must not inherit regions already served from a normal query's cache.
+        // Both queries still share each actual in-flight Apple request in AppFetcher.
+        String activeKey = key + (refresh ? ":refresh" : ":normal");
+        if (active.containsKey(key + ":refresh")) return active.get(key + ":refresh");
+        if (active.containsKey(activeKey)) return active.get(activeKey);
         Query previous = completed.getIfPresent(key);
-        if (previous != null && !retryFailed) return previous;
+        if (previous != null && !retryFailed && !refresh && previous.fresh()) return previous;
         if (active.size() >= settings.maxQueries) throw new IllegalStateException("同时查询过多，请稍后重试");
-        Query q = new Query(id, order.stream().map(Storefront::code).toList());
+        Query q = new Query(id, key, order.stream().map(Storefront::code).toList());
         if (previous != null) synchronized (previous) {
-            previous.regions.values().stream().filter(r -> !AppFetcher.failed(r)).forEach(r -> q.regions.put(r.area(), r));
+            q.rates = previous.rates;
+            previous.retained.values().forEach(q::retain);
+            previous.regions.values().forEach(q::retain);
+            if (retryFailed && !refresh) previous.regions.values().stream()
+                    .filter(r -> !AppFetcher.failed(r)).forEach(r -> q.regions.put(r.area(), r));
         }
-        active.put(key, q);
+        for (Storefront area : order) q.retain(fetcher.lastAvailable(id, area.code()));
+        active.put(activeKey, q);
+        sessions.put(q.queryId, q);
         orchestration.submit(() -> {
             try {
                 q.rates = exchange.snapshot();
                 List<CompletableFuture<Void>> tasks = new ArrayList<>();
                 for (Storefront area : order) {
                     synchronized (q) { if (q.regions.containsKey(area.code())) continue; }
-                    tasks.add(fetcher.fetch(id, area, retryFailed).handle((region, error) -> {
+                    tasks.add(fetcher.fetch(id, area, retryFailed, refresh).handle((region, error) -> {
                         q.accept(error == null ? region : failed(id, area, error));
                         return null;
                     }));
@@ -60,7 +84,11 @@ public class QueryService {
                 }
             } finally {
                 q.finish();
-                synchronized (QueryService.this) { completed.put(key, q); active.remove(key, q); }
+                synchronized (QueryService.this) {
+                    Query newer = completed.getIfPresent(key);
+                    if (newer == null || !Instant.parse(newer.startedAt).isAfter(Instant.parse(q.startedAt))) completed.put(key, q);
+                    active.remove(activeKey, q);
+                }
             }
         });
         return q;
@@ -70,21 +98,44 @@ public class QueryService {
     }
     public class Query {
         private final String id;
+        private final String key;
+        private final String queryId = UUID.randomUUID().toString();
         private final List<String> areas;
         private final String startedAt = Instant.now().toString();
         private final LinkedHashMap<String, Region> regions = new LinkedHashMap<>();
+        private final LinkedHashMap<String, Region> retained = new LinkedHashMap<>();
         private final Set<SseEmitter> subscribers = new CopyOnWriteArraySet<>();
         private volatile Rates rates = new Rates("USD", Map.of(), null, null, null, true, "正在获取汇率");
         private boolean done;
-        Query(String id, List<String> areas) { this.id = id; this.areas = List.copyOf(areas); }
+        Query(String id, String key, List<String> areas) { this.id = id; this.key = key; this.areas = List.copyOf(areas); }
+        void retain(Region r) {
+            if (r == null || r.status() != Status.AVAILABLE || !Instant.parse(r.fetchedAt()).plus(Duration.ofHours(settings.cacheHours)).isAfter(Instant.now())) return;
+            Region old = retained.get(r.area());
+            if (old == null || Instant.parse(old.fetchedAt()).isBefore(Instant.parse(r.fetchedAt()))) retained.put(r.area(), r);
+        }
+        synchronized boolean fresh() {
+            return done && regions.size() == areas.size() && regions.values().stream().allMatch(r -> {
+                Region latest = fetcher.cached(id, r.area());
+                return AppFetcher.fresh(r) && !fetcher.fetching(id, r.area())
+                        && (latest == null || latest.fetchedAt().equals(r.fetchedAt()));
+            });
+        }
         public synchronized Snapshot snapshot() {
             List<Region> values = List.copyOf(regions.values());
             int available = (int) values.stream().filter(r -> r.status() == Status.AVAILABLE).count();
             int unavailable = (int) values.stream().filter(r -> r.status() == Status.UNAVAILABLE).count();
-            App app = values.stream().filter(r -> r.app() != null).sorted(Comparator.comparingInt(r -> r.area().equals("cn") ? 0 : r.area().equals("us") ? 1 : 2)).map(Region::app).findFirst().orElse(null);
-            return new Snapshot(id, app, values, matcher.products(values, rates), new Progress(areas.size(), values.size(), available, unavailable, values.size() - available - unavailable, done), rates, startedAt, areas);
+            List<Region> fallback = retained.values().stream()
+                    .filter(r -> !regions.containsKey(r.area()) || AppFetcher.failed(regions.get(r.area()))).toList();
+            List<Region> displayed = new ArrayList<>(values);
+            displayed.addAll(fallback);
+            App app = displayed.stream().filter(r -> r.app() != null).sorted(Comparator.comparingInt(r -> r.area().equals("cn") ? 0 : r.area().equals("us") ? 1 : 2)).map(Region::app).findFirst().orElse(null);
+            return new Snapshot(id, app, values, matcher.products(displayed, rates), new Progress(areas.size(), values.size(), available, unavailable, values.size() - available - unavailable, done), rates, startedAt, areas, queryId, fallback);
         }
-        synchronized void accept(Region region) { regions.put(region.area(), region); publish("region", snapshot()); }
+        synchronized void accept(Region region) {
+            regions.put(region.area(), region);
+            if (!AppFetcher.failed(region)) retained.remove(region.area());
+            publish("region", snapshot());
+        }
         synchronized void finish() { done = true; publish("complete", snapshot()); subscribers.forEach(SseEmitter::complete); subscribers.clear(); }
         public synchronized SseEmitter subscribe() {
             SseEmitter emitter = new SseEmitter(30 * 60 * 1000L);

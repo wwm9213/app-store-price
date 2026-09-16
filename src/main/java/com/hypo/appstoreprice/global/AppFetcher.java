@@ -11,6 +11,7 @@ import static com.hypo.appstoreprice.global.Models.*;
 public class AppFetcher {
     record Cached(Region value, Instant expires) {}
     private final Cache<String, Cached> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private final Cache<String, Region> lastAvailable;
     private final Cache<String, App> metadata = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(Duration.ofDays(1)).build();
     private final ConcurrentHashMap<String, CompletableFuture<Region>> inFlight = new ConcurrentHashMap<>();
     private final AppleClient client;
@@ -18,13 +19,30 @@ public class AppFetcher {
     private final Settings settings;
     public AppFetcher(AppleClient client, AppStoreParser parser, Settings settings) {
         this.client = client; this.parser = parser; this.settings = settings;
+        lastAvailable = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(Duration.ofHours(settings.cacheHours)).build();
     }
     public App metadata(String appId, String area) { return metadata.getIfPresent(appId + ":" + area); }
     public CompletableFuture<Region> fetch(String appId, Storefront area, boolean retryFailed) {
+        return fetch(appId, area, retryFailed, false);
+    }
+    public Region cached(String appId, String area) {
+        Cached hit = cache.getIfPresent(appId + ":" + area);
+        return hit != null && hit.expires().isAfter(Instant.now()) ? hit.value() : null;
+    }
+    public Region lastAvailable(String appId, String area) { return lastAvailable.getIfPresent(appId + ":" + area); }
+    public boolean fetching(String appId, String area) { return inFlight.containsKey(appId + ":" + area); }
+    public static boolean fresh(Region region) {
+        if (region == null) return false;
+        Duration ttl = failed(region) ? Duration.ofSeconds(30) : Duration.ofMinutes(15);
+        return Instant.parse(region.fetchedAt()).plus(ttl).isAfter(Instant.now());
+    }
+    public synchronized CompletableFuture<Region> fetch(String appId, Storefront area, boolean retryFailed, boolean refresh) {
         String key = appId + ":" + area.code();
-        Cached hit = cache.getIfPresent(key);
-        if (hit != null && hit.expires().isAfter(Instant.now()) && !(retryFailed && failed(hit.value())))
-            return CompletableFuture.completedFuture(hit.value());
+        CompletableFuture<Region> running = inFlight.get(key);
+        if (running != null) return running;
+        Region hit = cached(appId, area.code());
+        if (!refresh && fresh(hit) && !(retryFailed && failed(hit)))
+            return CompletableFuture.completedFuture(hit);
         CompletableFuture<Region> pending = new CompletableFuture<>();
         CompletableFuture<Region> existing = inFlight.putIfAbsent(key, pending);
         if (existing != null) return existing;
@@ -36,6 +54,8 @@ public class AppFetcher {
                 default -> Duration.ofSeconds(30);
             };
             cache.put(key, new Cached(result, Instant.now().plus(ttl)));
+            if (result.status() == Status.AVAILABLE) lastAvailable.put(key, result);
+            else if (result.status() == Status.UNAVAILABLE) lastAvailable.invalidate(key);
             if (result.app() != null) metadata.put(key, result.app());
             pending.complete(result);
             inFlight.remove(key, pending);

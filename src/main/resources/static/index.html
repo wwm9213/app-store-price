@@ -67,12 +67,12 @@
     </section>
 
     <section class="workspace" x-show="currentId" x-cloak>
-      <div class="query-status" role="status"><span class="status-dot" :class="{working:loading}"></span><span x-text="loading ? '正在获取所选地区价格' : snapshot?.progress.complete ? '本轮查询完成' : '等待连接'"></span><b x-text="(snapshot?.progress.completed || 0) + ' / ' + queryAreas.length"></b><span class="pill" x-show="fromCache">本地缓存</span><span class="status-summary" x-show="snapshot" x-text="'可用 ' + (snapshot?.progress.available || 0) + ' · 不可用 ' + (snapshot?.progress.unavailable || 0) + ' · 失败 ' + (snapshot?.progress.failed || 0)"></span></div>
+      <div class="query-status" role="status"><span class="status-dot" :class="{working:loading}"></span><span x-text="queryStatus"></span><b x-text="(snapshot?.progress.completed || 0) + ' / ' + queryAreas.length"></b><span class="status-summary" x-show="snapshot" x-text="'可用 ' + (snapshot?.progress.available || 0) + ' · 不可用 ' + (snapshot?.progress.unavailable || 0) + ' · 失败 ' + (snapshot?.progress.failed || 0)"></span></div>
       <progress :max="queryAreas.length" :value="snapshot?.progress.completed || 0"></progress>
       <div class="app-header card">
         <img x-show="snapshot?.app?.icon" :src="snapshot?.app?.icon" alt="应用图标" class="app-icon">
         <div class="app-title"><p class="eyebrow">SELECTED APP</p><h2 x-text="snapshot?.app?.name || (snapshot?.progress.complete ? '未取得应用信息' : '正在获取应用信息…')"></h2><p><span x-text="snapshot?.app?.developer"></span><span class="app-id" x-text="'ID ' + currentId"></span></p></div>
-        <div class="actions"><button @click="query(currentId,{refresh:true,areas:queryAreas})" :disabled="loading">重新查询</button><button @click="share()">分享 ↗</button><button @click="download('csv')" :disabled="!snapshot">CSV ↓</button><button @click="download('json')" :disabled="!snapshot">JSON ↓</button></div>
+        <div class="actions"><button @click="query(currentId,{refresh:true,areas:queryAreas})" :disabled="loading" x-text="loading ? '正在更新…' : '获取最新价格'"></button><button @click="share()">分享 ↗</button><button @click="download('csv')" :disabled="!snapshot">CSV ↓</button><button @click="download('json')" :disabled="!snapshot">JSON ↓</button></div>
       </div>
 
       <div class="comparison-layout">
@@ -95,6 +95,7 @@
           <div class="comparison-title"><div><p class="eyebrow">PRICE COMPARISON</p><h2 x-text="product?.name || '等待公开价格'"></h2></div><span class="pill" x-text="(product?.rows.length || 0) + ' 区覆盖'"></span></div>
           <p class="matching-note" x-show="product && !product.comparable" x-text="product?.summarized ? '同名项目含多个商品或报价，以下按地区汇总，不计算跨档排名和差价。' : '商品身份尚未确认，暂不计算跨区排名和差价。'"></p>
           <p class="matching-note subtle" x-show="product?.comparable && product.matchStatus==='INFERRED'">按唯一公开名称推断匹配。类型及续订周期未公开时不作推定。</p>
+          <p class="matching-note" x-show="snapshot?.retainedRegions?.length">保留的旧价格不参与最低 / 最高价和基准差价计算；各地区下方显示实际抓取时间。</p>
           <div class="stats" x-show="product?.comparable">
             <div class="stat card"><span>已获取地区最低</span><strong x-text="money(lowest)"></strong></div>
             <div class="stat card"><span>已获取地区最高</span><strong x-text="money(highest)"></strong></div>
@@ -148,16 +149,16 @@
           </div>
           <div class="comparison-meta"><span x-text="snapshot?.exchangeRates?.asOf ? '汇率 ' + snapshot.exchangeRates.asOf + (snapshot.exchangeRates.stale ? ' · 缓存' : '') : '汇率暂不可用'"></span><button class="text-button" @click="detailMode=!detailMode" x-text="detailMode ? '返回比较表' : '查看原始地区数据 ↗'"></button></div>
           <div x-show="!detailMode" class="card results-card">
-            <table class="price-table"><thead><tr><th>地区</th><th>当地价格</th><th>人民币 / 美元</th><th x-text="product?.comparable ? '对比' + area(benchmark).nameZh : '匹配状态'"></th></tr></thead><tbody><template x-for="p in rows" :key="p.area"><tr>
-              <td><a :href="p.sourceUrl" target="_blank" rel="noopener"><span class="country-flag" x-text="flag(p.area)"></span><strong x-text="p.areaName"></strong></a><small class="low" x-show="product?.comparable && p.cny != null && Number(p.cny)===lowest">已获取最低</small></td>
+            <table class="price-table"><thead><tr><th>地区</th><th>当地价格</th><th>人民币 / 美元</th><th x-text="product?.comparable ? '对比' + area(benchmark).nameZh : '匹配状态'"></th></tr></thead><tbody><template x-for="p in rows" :key="selectedKey + ':' + p.area"><tr>
+              <td><a :href="p.sourceUrl" target="_blank" rel="noopener"><span class="country-flag" x-text="flag(p.area)"></span><strong x-text="p.areaName"></strong></a><small class="low" x-show="!retained(p.area) && product?.comparable && p.cny != null && Number(p.cny)===lowest">已获取最低</small><small class="price-age" :class="{warning:retained(p.area)}" x-text="priceState(p)"></small></td>
               <td><span x-show="p.quotes.length===1" x-text="localText(p)"></span><details x-show="p.quotes.length>1"><summary x-text="localText(p) + ' ▾'"></summary><ul class="quote-options"><template x-for="q in p.quotes" :key="q.key"><li><b x-text="q.local.formatted"></b><small x-text="[q.type==='UNKNOWN' ? '' : q.type,q.period].filter(Boolean).join(' · ')"></small></li></template></ul></details><small class="currency" x-text="p.local.currency"></small></td>
               <td><strong class="cny" x-text="quoteRange(p)"></strong><small class="currency" x-text="quoteRange(p,'usd')"></small><small class="warning" x-show="product?.comparable && p.anomalousLow">异常低价</small></td>
               <td class="delta" x-text="delta(p)"></td>
             </tr></template></tbody></table>
-            <div class="mobile-prices"><template x-for="p in rows" :key="p.area"><article><div class="mobile-row"><a :href="p.sourceUrl" target="_blank" rel="noopener"><span x-text="flag(p.area)"></span> <strong x-text="p.areaName"></strong></a><strong class="cny" x-text="quoteRange(p)"></strong></div><div class="mobile-row muted"><span x-text="localText(p)"></span><span x-text="quoteRange(p,'usd')"></span></div><details x-show="p.quotes.length>1"><summary>展开各档报价</summary><ul class="quote-options"><template x-for="q in p.quotes" :key="q.key"><li x-text="q.local.formatted"></li></template></ul></details><small class="delta" x-text="delta(p)"></small></article></template></div>
+            <div class="mobile-prices"><template x-for="p in rows" :key="selectedKey + ':' + p.area"><article><div class="mobile-row"><a :href="p.sourceUrl" target="_blank" rel="noopener"><span x-text="flag(p.area)"></span> <strong x-text="p.areaName"></strong></a><strong class="cny" x-text="quoteRange(p)"></strong></div><div class="mobile-row muted"><span x-text="localText(p)"></span><span x-text="quoteRange(p,'usd')"></span></div><details x-show="p.quotes.length>1"><summary>展开各档报价</summary><ul class="quote-options"><template x-for="q in p.quotes" :key="q.key"><li x-text="q.local.formatted"></li></template></ul></details><small class="delta" x-text="delta(p)"></small><small class="price-age" :class="{warning:retained(p.area)}" x-text="priceState(p)"></small></article></template></div>
             <p class="empty" x-show="!rows.length" x-text="loading ? '价格正在陆续返回…' : '当前条件下暂无公开价格'"></p>
           </div>
-          <div x-show="detailMode" class="details-grid"><template x-for="r in localDetails" :key="r.area"><article class="card region-detail"><h3 x-text="flag(r.area) + ' ' + area(r.area).nameZh"></h3><p x-text="r.app.name"></p><p x-text="'软件本体：' + (r.price?.formatted || '未取得价格')"></p><template x-for="(item,index) in r.items" :key="index"><div class="detail-item"><span x-text="item.name"></span><b x-text="item.local.formatted || '解析失败'"></b></div></template><p class="muted" x-show="!r.items.length">页面未公开内购项目</p><template x-for="issue in r.issues" :key="issue"><small class="warning" x-text="issue"></small></template></article></template></div>
+          <div x-show="detailMode" class="details-grid"><template x-for="r in localDetails" :key="r.area"><article class="card region-detail"><h3 x-text="flag(r.area) + ' ' + area(r.area).nameZh"></h3><p x-text="r.app.name"></p><small class="price-age" :class="{warning:retained(r.area)}" x-text="priceState(r)"></small><p x-text="'软件本体：' + (r.price?.formatted || '未取得价格')"></p><template x-for="(item,index) in r.items" :key="index"><div class="detail-item"><span x-text="item.name"></span><b x-text="item.local.formatted || '解析失败'"></b></div></template><p class="muted" x-show="!r.items.length">页面未公开内购项目</p><template x-for="issue in r.issues" :key="issue"><small class="warning" x-text="issue"></small></template></article></template></div>
           <div class="status-controls"><label><input type="checkbox" x-model="showUnavailable"> 显示不可售地区</label><button x-show="snapshot?.progress.complete && snapshot?.progress.failed" @click="query(currentId,{retryFailed:true,areas:queryAreas})">重试失败地区</button></div>
           <div class="status-list"><template x-for="r in failedRegions" :key="r.area"><div><strong x-text="area(r.area).nameZh"></strong><span x-text="statusName(r.status)"></span><small x-text="r.message"></small></div></template></div>
           <p class="footnote">来自 Apple 公开页面，内购目录可能不完整。原价、来源和匹配依据保留在导出数据中；最终金额以 Apple 结算页为准。</p>
@@ -167,7 +168,7 @@
 
     <section class="welcome" x-show="!currentId && !candidates.length && !searching">
       <div class="welcome-icon">↗</div><h2>从一个应用开始</h2><p>输入名称后选择应用，或用链接 / ID 直接定位。<br>默认只查询主流地区，也可以保存你的常用地区。</p>
-      <div class="feature-row"><span>◎ 逐区公开售价</span><span>⇄ 三种价格视角</span><span>◷ 6 小时本地缓存</span></div>
+      <div class="feature-row"><span>◎ 逐区公开售价</span><span>⇄ 三种价格视角</span><span>◷ 15 分钟内复用 · 随时更新</span></div>
     </section>
   </main>
   <footer><span>App Store Price <span class="footer-dot">·</span> 公开价格，透明比较。</span><a href="https://github.com/fawazahmed0/exchange-api" target="_blank" rel="noopener">汇率数据：Currency API ↗</a></footer>
@@ -188,7 +189,7 @@
       <input x-model="areaSearch" aria-label="查找可选地区" placeholder="搜索国家、地区或代码…">
       <div class="dialog-tools"><span x-text="'已选 ' + draftAreas.length + ' 个地区'"></span><button class="text-button" @click="draftAreas=[...mainstream]">选择主流地区</button><button class="text-button" @click="draftAreas=[]">清空选择</button></div>
       <div class="area-grid"><template x-for="s in selectableAreas" :key="s.code"><label :class="{checked:draftAreas.includes(s.code)}"><input type="checkbox" :checked="draftAreas.includes(s.code)" @change="toggleDraft(s.code)"><span><b x-text="s.nameZh"></b><small x-text="s.code.toUpperCase() + ' · ' + s.nameEn"></small></span></label></template><p class="empty" x-show="!selectableAreas.length">没有匹配的地区</p></div>
-      <div class="cache-settings"><div><strong>查询缓存</strong><small x-text="cacheCount + ' 条本地记录 · 最多 5 条 · 6 小时有效'"></small></div><button @click="clearCache()" :disabled="!cacheCount">清除缓存</button></div>
+      <div class="cache-settings"><div><strong>查询缓存</strong><small x-text="cacheCount + ' 条本地记录 · 最多 5 条 · 保留 6 小时，15 分钟后更新'"></small></div><button @click="clearCache()" :disabled="!cacheCount">清除缓存</button></div>
       <div class="dialog-actions"><button @click="managing=false">取消</button><button class="primary" @click="saveAreas()">保存并应用</button></div>
     </section>
   </div>

@@ -33,5 +33,6 @@ public final class Models {
     public record Progress(int total, int completed, int available, int unavailable, int failed,
                            boolean complete) {}
     public record Snapshot(String appId, App app, List<Region> regions, List<Product> products,
-                           Progress progress, Rates exchangeRates, String startedAt, List<String> areas) {}
+                           Progress progress, Rates exchangeRates, String startedAt, List<String> areas,
+                           String queryId, List<Region> retainedRegions) {}
 }

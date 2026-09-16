@@ -74,4 +74,42 @@ class FetchAndRatesTest {
         assertEquals(0,new java.math.BigDecimal("35").compareTo(ExchangeRateService.convert(local,stale,"CNY")));
         assertNull(ExchangeRateService.convert(new LocalPrice(java.math.BigDecimal.ONE,"ZZZ","?"),stale,"CNY"));
     }
+    @Test void forceRefreshBypassesSuccessCacheAndSharesPendingNetworkWork() throws Exception {
+        Settings settings = new Settings(); AppleClient client = mock(AppleClient.class);
+        CompletableFuture<Region> firstNetwork = new CompletableFuture<>(), secondNetwork = new CompletableFuture<>();
+        when(client.submit(any())).thenReturn((CompletableFuture) firstNetwork, (CompletableFuture) secondNetwork);
+        var fetcher = new AppFetcher(client,new AppStoreParser(),settings); var us = new StorefrontRegistry().get("us");
+        Region old = MatchingTest.region("us",List.of());
+        var first = fetcher.fetch("1",us,false); firstNetwork.complete(old); first.get();
+        assertSame(old,fetcher.fetch("1",us,false).get());
+        var force = fetcher.fetch("1",us,false,true);
+        assertFalse(force.isDone());
+        assertSame(force,fetcher.fetch("1",us,false,true));
+        assertSame(force,fetcher.fetch("1",us,false,false));
+        Region fresh = MatchingTest.region("us",List.of()); secondNetwork.complete(fresh);
+        assertSame(fresh,force.get()); verify(client,times(2)).submit(any());
+    }
+    @Test void staleSuccessRefreshesAndFailureRetainsOriginalObservation() throws Exception {
+        Settings settings = new Settings(); AppleClient client = mock(AppleClient.class);
+        Region source = MatchingTest.region("us",List.of());
+        Region old = new Region(source.area(),source.status(),null,source.app(),source.price(),source.items(),source.sourceUrl(),
+                Instant.now().minus(Duration.ofMinutes(16)).toString(),source.language(),source.iapCoverage(),source.issues());
+        Region failure = Region.failure("us",Status.RATE_LIMITED,"429",source.sourceUrl());
+        when(client.submit(any())).thenReturn((CompletableFuture) CompletableFuture.completedFuture(old),
+                (CompletableFuture) CompletableFuture.completedFuture(failure));
+        var fetcher = new AppFetcher(client,new AppStoreParser(),settings); var us = new StorefrontRegistry().get("us");
+        fetcher.fetch("1",us,false).get();
+        assertSame(failure,fetcher.fetch("1",us,false).get());
+        assertSame(old,fetcher.lastAvailable("1","us"));
+        assertFalse(AppFetcher.fresh(old)); assertTrue(AppFetcher.fresh(MatchingTest.region("us",List.of())));
+        verify(client,times(2)).submit(any());
+    }
+    @Test void forceRefreshAlsoBypassesUnavailableCache() throws Exception {
+        AppleClient client = mock(AppleClient.class);
+        when(client.submit(any())).thenReturn((CompletableFuture) CompletableFuture.completedFuture(Region.failure("us",Status.UNAVAILABLE,"404","url")),
+                (CompletableFuture) CompletableFuture.completedFuture(MatchingTest.region("us",List.of())));
+        var fetcher = new AppFetcher(client,new AppStoreParser(),new Settings()); var us = new StorefrontRegistry().get("us");
+        assertEquals(Status.UNAVAILABLE,fetcher.fetch("1",us,false).get().status());
+        assertEquals(Status.AVAILABLE,fetcher.fetch("1",us,false,true).get().status());
+    }
 }

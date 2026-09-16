@@ -9,7 +9,7 @@ import static com.hypo.appstoreprice.global.Models.*;
 class MatchingTest {
     static LocalPrice price(String value){return new LocalPrice(new BigDecimal(value),"USD","$"+value);}
     static Item item(String name,String value){return new Item(name,null,"UNKNOWN",null,price(value),name,"English");}
-    static Region region(String area,List<Item> items){return new Region(area,Status.AVAILABLE,null,new App("1","Test","","Dev",null),price("0"),items,"https://apps.apple.com/"+area+"/app/id1","2026-09-16T00:00:00Z","en","PUBLIC_PAGE_ONLY",List.of());}
+    static Region region(String area,List<Item> items){return new Region(area,Status.AVAILABLE,null,new App("1","Test","","Dev",null),price("0"),items,"https://apps.apple.com/"+area+"/app/id1",java.time.Instant.now().toString(),"en","PUBLIC_PAGE_ONLY",List.of());}
     static Rates rates(){return new Rates("USD",Map.of("USD",BigDecimal.ONE,"CNY",new BigDecimal("7")),"2026-09-16","2026-09-16T00:00:00Z","fixture",false,null);}
     @Test void orderDoesNotControlIdentityAndNamesRemainInferred() throws Exception {
         var matcher=new ProductMatcher(new StorefrontRegistry());
