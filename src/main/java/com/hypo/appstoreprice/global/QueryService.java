@@ -83,8 +83,9 @@ public class QueryService {
                     for (Storefront area : order) if (!q.regions.containsKey(area.code())) q.accept(failed(id, area, ex));
                 }
             } finally {
-                q.finish();
                 synchronized (QueryService.this) {
+                    // A caller observing completion must also see the cached query for its next refresh.
+                    q.finish();
                     Query newer = completed.getIfPresent(key);
                     if (newer == null || !Instant.parse(newer.startedAt).isAfter(Instant.parse(q.startedAt))) completed.put(key, q);
                     active.remove(activeKey, q);
