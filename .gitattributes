@@ -1,0 +1,3 @@
+# Preserve the original export and Windows wrapper bytes, including CRLF.
+docs/verification/*.csv -text whitespace=cr-at-eol
+mvnw.cmd -text whitespace=cr-at-eol
