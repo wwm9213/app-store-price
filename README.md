@@ -45,11 +45,17 @@
 
 汇率使用 [Currency API](https://github.com/fawazahmed0/exchange-api)（CC0，每日更新），默认 USD 快照来自 jsDelivr，备用为 `currency-api.pages.dev`。一次查询固定同一份汇率；新查询可对缓存当地价格重新换算。刷新失败使用最近成功快照，首次无汇率仍展示当地价格。汇率日期以响应为准，通常不是查询当天。基准价缺失或为零不计算百分比；至少 5 个正价样本时，低于中位数四分之一标记异常低价，仍保留记录。
 
-## 连接 GitHub 自动部署
+## 在线访问与自动部署
 
 本仓库提供 Render 部署配置，保留名称搜索、任意 App ID 实时查询及 SSE 进度，无需自行维护服务器。
 
 当前站点：[app-store-price-lb2k.onrender.com](https://app-store-price-lb2k.onrender.com/)，使用新加坡 Free 实例。休眠后的首次打开需等待服务启动，请勿反复刷新。
+
+**网站已上线，GitHub 自动部署已验证成功。** 2026-09-16 已确认提交 `32df193` 在 GitHub CI 检查通过后，由 Render 自动部署成功，部署后的公网接口正常。直接使用上述站点无需登录或授权 GitHub / Render。
+
+### 自行部署说明
+
+以下步骤仅适用于在自己的 Render 账号中创建独立站点；当前在线站点已完成授权和服务创建。
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/wwm9213/app-store-price)
 
@@ -62,7 +68,7 @@
 
 Free 实例闲置 15 分钟会休眠，下一次访问可能等待约一分钟；重启会清空服务端内存及本地汇率缓存，浏览器中保存的地区和快照不受影响。免费实例有运行时间、流量与构建配额限制，适合个人试用；不附加付费数据库、磁盘或其他服务。[免费实例限制](https://render.com/docs/free)
 
-登录、GitHub 授权和首次创建服务需要在你的 Render 账号中完成；提供部署配置或发布镜像，不代表已经获得在线访问地址。
+自行部署时，请在自己的 Render 账号中完成登录、GitHub 仓库授权和首次创建服务，并以该服务实际分配的访问地址为准。
 
 ## GitHub 构建与镜像发布
 
